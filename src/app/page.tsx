@@ -425,7 +425,7 @@ export default function Home() {
         <div className="footer-top">
           <div>
             <a className="wordmark footer-mark" href="#home">
-              OGBOR<span>✳</span>
+              OGBOR YOUTH TECH FEST<span>✳</span>
             </a>
             <p>
               Unlocking a new digital era.
