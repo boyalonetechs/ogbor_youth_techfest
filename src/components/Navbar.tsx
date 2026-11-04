@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const navLinks = [
@@ -42,7 +43,14 @@ export default function Navbar() {
         href="#home"
         aria-label="Ogbor Youth Tech Fest home"
       >
-        <img src="/ogbor.png" alt="" className="wordmark-logo" />
+        <Image
+          src="/ogbor.png"
+          alt=""
+          width={40}
+          height={40}
+          className="wordmark-logo"
+          priority
+        />
       </a>
 
       <nav
@@ -59,13 +67,6 @@ export default function Navbar() {
             {link.label}
           </a>
         ))}
-        <a
-          className="nav-menu-cta"
-          href="#get-involved"
-          onClick={() => setMenuOpen(false)}
-        >
-          REGISTER NOW <span aria-hidden="true">↗</span>
-        </a>
       </nav>
 
       <a className="nav-cta" href="#get-involved">

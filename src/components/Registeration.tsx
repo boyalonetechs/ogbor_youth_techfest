@@ -1,5 +1,4 @@
 "use client";
-import { BiArrowToRight } from "react-icons/bi";
 
 export default function Registeration() {
   return (
