@@ -1,10 +1,10 @@
 .oytf {
-  --oytf-ink: #171912;
-  --oytf-paper: #f5f3eb;
-  --oytf-lime: #d7f35a;
-  --oytf-green: #005536;
-  --oytf-muted: #77786f;
-  --oytf-line: rgba(23, 25, 18, 0.18);
+  --oytf-ink: var(--hero-black, #050b06);
+  --oytf-paper: var(--hero-white, #ffffff);
+  --oytf-lime: var(--hero-yellow, #fae01a);
+  --oytf-green: var(--hero-green, #00592d);
+  --oytf-muted: rgba(5, 11, 6, 0.62);
+  --oytf-line: rgba(5, 11, 6, 0.18);
 
   position: relative;
   overflow: hidden;
@@ -160,7 +160,7 @@
 
 /* About ---------------------------------------------------------------- */
 .oytf-about {
-  background: #e9e8df;
+  background: color-mix(in srgb, var(--oytf-lime) 22%, var(--oytf-paper));
 }
 
 .oytf-intro-grid {
@@ -297,7 +297,7 @@
 
 /* Programme ------------------------------------------------------------ */
 .oytf-programme {
-  background: #20221b;
+  background: var(--oytf-ink);
   color: var(--oytf-paper);
 }
 
@@ -530,7 +530,7 @@
 
 /* Get involved --------------------------------------------------------- */
 .oytf-involved {
-  background: #f0efe8;
+  background: color-mix(in srgb, var(--oytf-lime) 14%, var(--oytf-paper));
 }
 
 .oytf-involved-heading {
@@ -565,15 +565,15 @@
 }
 
 .oytf-involve-card--attend {
-  background: #d9ec79;
+  background: var(--oytf-lime);
 }
 
 .oytf-involve-card--volunteer {
-  background: #dfe1d5;
+  background: color-mix(in srgb, var(--oytf-green) 14%, var(--oytf-paper));
 }
 
 .oytf-involve-card--exhibit {
-  background: #c5d8d1;
+  background: color-mix(in srgb, var(--oytf-green) 24%, var(--oytf-paper));
 }
 
 .oytf-involve-top {
@@ -875,7 +875,7 @@
 
 /* Partners ------------------------------------------------------------- */
 .oytf-partners {
-  background: #e6e6dd;
+  background: color-mix(in srgb, var(--oytf-green) 8%, var(--oytf-paper));
 }
 
 .oytf-partners-grid {
