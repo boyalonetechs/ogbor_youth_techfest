@@ -160,7 +160,7 @@
 
 /* About ---------------------------------------------------------------- */
 .oytf-about {
-  background: var(--oytf-lime);
+  background: color-mix(in srgb, var(--oytf-green) 10%, var(--oytf-paper));
 }
 
 .oytf-intro-grid {
