@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import "@/components/landing/landing.css";
 
 export const metadata: Metadata = {
   title: "Register | Ogbor Youth Tech Fest 2026",

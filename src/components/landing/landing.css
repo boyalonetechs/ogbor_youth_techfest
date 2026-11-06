@@ -149,12 +149,13 @@
 .oytf-button--outline {
   border: 1px solid var(--oytf-line);
   background: transparent;
-  color: var(--oytf-ink);
+  color: var(--oytf-ink) !important;
 }
 
 .oytf-button--outline:hover {
   border-color: var(--oytf-green);
   background: rgba(0, 85, 54, 0.08);
+  color: var(--oytf-ink) !important;
 }
 
 /* About ---------------------------------------------------------------- */
@@ -460,13 +461,16 @@
   line-height: 1.7;
 }
 
+.oytf-involve-card .oytf-card-button,
 .oytf-experience .oytf-button {
   background: var(--oytf-ink);
   color: #fff;
 }
 
+.oytf-involve-card .oytf-card-button:hover,
 .oytf-experience .oytf-button:hover {
   background: #46483d;
+  color: #fff;
 }
 
 .oytf-experience-right {
