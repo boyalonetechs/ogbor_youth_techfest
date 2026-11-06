@@ -71,7 +71,7 @@ export default function Objectives() {
         {/* Audience */}
         <div className="pt-6 border-t border-[#171912]/18">
           <span className="text-xs font-extrabold tracking-[0.11em] uppercase text-[#717269] block mb-2">
-            YOU'RE IN THE RIGHT ROOM IF YOU'RE A...
+            YOU&apos;RE IN THE RIGHT ROOM IF YOU&apos;RE A...
           </span>
           <p className="text-sm font-bold text-[#171912]">
             Student <i className="text-[#005536] not-italic mx-2">·</i> Graduate <i className="text-[#005536] not-italic mx-2">·</i> Corps member <i className="text-[#005536] not-italic mx-2">·</i> Founder <i className="text-[#005536] not-italic mx-2">·</i> Freelancer <i className="text-[#005536] not-italic mx-2">·</i> Curious mind

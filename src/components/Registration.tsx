@@ -38,7 +38,7 @@ export default function Registration() {
             <span>YOUR WAY.</span>
           </h2>
           <p className="registration-lead">
-            Whether you want to learn, contribute, or showcase — there's a place
+            Whether you want to learn, contribute, or showcase — there&apos;s a place
             for you at Ogbor Youth Tech Fest 2026.
           </p>
         </div>

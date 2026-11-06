@@ -20,7 +20,7 @@ export default function Partners() {
             <h2 className="font-[950] leading-[0.86] tracking-[-0.085em] text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-6">
               INVEST IN
               <br />
-              <span className="text-[#989c8b]">WHAT'S NEXT.</span>
+              <span className="text-[#989c8b]">WHAT&apos;S NEXT.</span>
             </h2>
             <p className="text-sm leading-[1.7] text-[#65675e] max-w-[300px] mb-8">
               Help connect young people with the skills, tools and opportunities to thrive in the digital economy.
@@ -50,7 +50,7 @@ export default function Partners() {
             {/* Partner copy */}
             <div>
               <span className="text-xs font-extrabold tracking-[0.08em] uppercase text-[#171912] block mb-3">
-                LET'S BUILD SOMETHING THAT LASTS
+                LET&apos;S BUILD SOMETHING THAT LASTS
               </span>
               <p className="text-sm leading-[1.6] text-[#696b62] mb-6">
                 We welcome organisations, businesses and individuals who believe in the potential of young people.

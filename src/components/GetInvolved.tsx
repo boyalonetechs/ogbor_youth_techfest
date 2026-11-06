@@ -2,7 +2,24 @@
 
 import { useState } from "react";
 
-const involvementOptions = [
+type TabId = "attend" | "volunteer" | "exhibit";
+type FormValues = Record<string, string>;
+type Field = {
+  name: string;
+  label: string;
+  type: string;
+  required?: boolean;
+  options?: readonly string[];
+};
+type InvolvementOption = {
+  id: TabId;
+  label: string;
+  description: string;
+  color: string;
+  fields: readonly Field[];
+};
+
+const involvementOptions: readonly InvolvementOption[] = [
   {
     id: "attend",
     label: "Register to Attend",
@@ -78,37 +95,39 @@ const involvementOptions = [
 ];
 
 export default function GetInvolved() {
-  const [activeTab, setActiveTab] = useState("attend");
-  const [formData, setFormData] = useState({
+  const [activeTab, setActiveTab] = useState<TabId>("attend");
+  const [formData, setFormData] = useState<Record<TabId, FormValues>>({
     attend: {},
     volunteer: {},
     exhibit: {},
   });
-  const [submitStatus, setSubmitStatus] = useState<Record<string, string>>({});
+  const [submitStatus, setSubmitStatus] = useState<Record<TabId, "" | "submitting" | "success">>({
+    attend: "",
+    volunteer: "",
+    exhibit: "",
+  });
 
-  const handleChange = (tab: string, field: string, value: string) => {
-    setFormData(prev => ({
+  const handleChange = (tab: TabId, field: string, value: string) => {
+    setFormData((prev) => ({
       ...prev,
       [tab]: { ...prev[tab], [field]: value },
     }));
   };
 
-  const handleSubmit = async (tab: string, e: React.FormEvent) => {
+  const handleSubmit = async (tab: TabId, e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitStatus(prev => ({ ...prev, [tab]: "submitting" }));
-    
+    setSubmitStatus((prev) => ({ ...prev, [tab]: "submitting" }));
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setSubmitStatus(prev => ({ ...prev, [tab]: "success" }));
-    setFormData(prev => ({ ...prev, [tab]: {} }));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setSubmitStatus((prev) => ({ ...prev, [tab]: "success" }));
+    setFormData((prev) => ({ ...prev, [tab]: {} }));
+
     setTimeout(() => {
-      setSubmitStatus(prev => ({ ...prev, [tab]: "" }));
+      setSubmitStatus((prev) => ({ ...prev, [tab]: "" }));
     }, 3000);
   };
-
-  const currentOption = involvementOptions.find(opt => opt.id === activeTab)!;
 
   return (
     <section id="get-involved" className="py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-[#f0efe8]">
@@ -131,7 +150,7 @@ export default function GetInvolved() {
             <span className="text-[#989c8b]">YOUR WAY.</span>
           </h2>
           <p className="text-sm leading-[1.8] text-[#62645c] max-w-2xl">
-            Whether you want to learn, contribute, or showcase — there's a place for you at Ogbor Youth Tech Fest 2026.
+            Whether you want to learn, contribute, or showcase — there&apos;s a place for you at Ogbor Youth Tech Fest 2026.
           </p>
         </div>
 

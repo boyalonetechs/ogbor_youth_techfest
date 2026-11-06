@@ -30,7 +30,7 @@ export default function About() {
               A room full of possibility. A community ready to make things happen.
             </p>
             <p className="text-sm leading-[1.8] text-[#62645c] mb-4">
-              Ogbor Youth Tech Fest is a youth-focused technology, innovation and empowerment initiative. We're here to bridge the gap between youthful potential and the opportunities of the digital economy.
+              Ogbor Youth Tech Fest is a youth-focused technology, innovation and empowerment initiative. We&apos;re here to bridge the gap between youthful potential and the opportunities of the digital economy.
             </p>
             <p className="text-sm leading-[1.8] text-[#62645c] mb-6">
               Through practical demonstrations, expert-led conversations and new connections, we want young people to move beyond consuming technology—to creating value with it.
@@ -39,7 +39,7 @@ export default function About() {
               href="#programme"
               className="inline-block text-xs font-extrabold uppercase tracking-[0.09em] text-[#171912] hover:text-[#005536] transition-colors"
             >
-              WHAT WE'RE BUILDING <span className="text-xl ml-2">↓</span>
+              WHAT WE&apos;RE BUILDING <span className="text-xl ml-2">↓</span>
             </a>
           </div>
         </div>

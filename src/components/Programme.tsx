@@ -58,13 +58,13 @@ export default function Programme() {
             <span className="text-[#a0a397]">REAL POSSIBILITIES.</span>
           </h2>
           <p className="text-sm leading-[1.7] text-[#c1c1b9] max-w-[220px]">
-            Three conversations about what's next—and how we can build it together.
+            Three conversations about what&apos;s next—and how we can build it together.
           </p>
         </div>
 
         {/* Panel list */}
         <div className="border-t border-[#ffffff35]">
-          {panels.map((panel, index) => (
+          {panels.map((panel) => (
             <article
               key={panel.n}
               className="grid grid-cols-[130px_1fr_35px] gap-8 py-7 border-b border-[#ffffff35] items-start"
