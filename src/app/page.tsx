@@ -1,11 +1,11 @@
 import Hero from "@/components/Hero";
-import PanelSessions from "@/components/PanelSessions";
+import Landing from "@/components/landing/Landing";
 
 export default function Home() {
   return (
     <main>
       <Hero />
-      <PanelSessions />
+      <Landing />
     </main>
   );
 }

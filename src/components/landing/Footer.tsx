@@ -1,0 +1,58 @@
+function Arrow() {
+  return <span aria-hidden="true">↗</span>;
+}
+
+export default function Footer() {
+  return (
+    <footer className="oytf-footer" id="contact">
+      <div className="oytf-footer-top">
+        <div>
+          <a className="oytf-footer-mark" href="#home">
+            OGBOR YOUTH TECH FEST<span>✳</span>
+          </a>
+          <p>
+            Unlocking a new digital era.
+            <br />
+            Empowering youths. Inspiring innovation.
+            <br />
+            Creating opportunities.
+          </p>
+          <p className="oytf-footer-meta">
+            Organised by DP Hub &amp; Tech by Leadpath
+            <br />
+            Ogbor Hill, Aba, Abia State.
+          </p>
+        </div>
+
+        <div className="oytf-footer-contact">
+          <span className="oytf-footer-label">LET’S TALK</span>
+          <a href="mailto:ogboryouthtechfest@gmail.com">
+            ogboryouthtechfest@gmail.com <Arrow />
+          </a>
+          <a href="tel:+2348063917367">
+            08063917367 <Arrow />
+          </a>
+          <small>
+            Have questions or want to partner with us?
+            <br />
+            We would love to hear from you.
+          </small>
+        </div>
+
+        <div className="oytf-footer-links">
+          <span className="oytf-footer-label">FOLLOW THE JOURNEY</span>
+          <a href="#contact">Instagram <Arrow /></a>
+          <a href="#contact">Facebook <Arrow /></a>
+          <a href="#contact">LinkedIn <Arrow /></a>
+          <a href="#contact">TikTok <Arrow /></a>
+        </div>
+      </div>
+
+      <div className="oytf-footer-bottom">
+        <span>© 2026 OGBOR YOUTH TECH FEST</span>
+        <span>ORGANISED BY DP HUB &amp; TECH BY LEADPATH</span>
+        <a href="#home">BACK TO TOP ↑</a>
+      </div>
+    </footer>
+  );
+}

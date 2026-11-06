@@ -39,7 +39,7 @@ export default function Navbar() {
 
   return (
     <header className="flex justify-between items-center p-2 max-w-[1000px] 2xl:p-4 mx-auto w-full 2xl:max-w-7xl">
-      <div className="relative flex justify-between rounded-sm items-center w-full bg-[#050B06] text-white! p-2 2xl:p-3">
+      <div className="relative flex justify-between rounded-2xl lg:rounded-sm items-center w-full bg-[#050B06] text-white! p-2 2xl:p-3">
         {" "}
         <Link
           className="wordmark"

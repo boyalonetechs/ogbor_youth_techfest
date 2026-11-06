@@ -113,7 +113,7 @@ export default function Hero() {
           <div className="mt-9 flex items-center gap-2">
             <Link
               href="#get-involved"
-              className="bg-[#050B06] px-6 py-3 font-rounded text-base font-bold text-white shadow-sm transition-colors duration-200 hover:bg-[#00592D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00592D]"
+              className="bg-[#050B06] px-6 py-3 font-rounded text-base font-bold text-white transition-colors duration-200 hover:bg-[#00592D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00592D]"
             >
               Register now
             </Link>
@@ -121,10 +121,10 @@ export default function Hero() {
             <Link
               href="#programme"
               aria-label="Explore the programme"
-              className="flex h-12 w-12 items-center justify-center bg-[#050B06] text-white shadow-sm transition-colors duration-200 hover:bg-[#00592D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00592D]"
+              className="flex h-12 w-12 items-center justify-center bg-[#050B06] text-white transition-colors duration-200 hover:bg-[#00592D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00592D]"
             >
               <svg
-                className="h-5 w-5 fill-current"
+                className="h-5 w-5 fill-current hover:animate-spin"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
               >
