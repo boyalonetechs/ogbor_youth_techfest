@@ -15,10 +15,6 @@ export default function SaveTheDate() {
 
         <div className="oytf-date-side">
           <span>MONDAY · 30 NOVEMBER 2026</span>
-          <strong>
-            ONE DAY.
-            <br />A WORLD OF POSSIBILITY.
-          </strong>
           <Countdown />
         </div>
       </div>
