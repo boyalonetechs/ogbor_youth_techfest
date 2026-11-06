@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
@@ -7,9 +10,9 @@ export default function Footer() {
     <footer className="oytf-footer" id="contact">
       <div className="oytf-footer-top">
         <div>
-          <a className="oytf-footer-mark" href="#home">
-            OGBOR YOUTH TECH FEST<span>✳</span>
-          </a>
+          <Link className="oytf-footer-mark" href="/" aria-label="Ogbor Youth Tech Fest home">
+            <Image src="/l.png" alt="Ogbor Youth Tech Fest" width={1586} height={518} style={{ height: 40, width: "auto" }} />
+          </Link>
           <p>
             Unlocking a new digital era.
             <br />
