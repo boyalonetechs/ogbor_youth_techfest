@@ -59,7 +59,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="oytf-involved-heading">
-          <h1 className="oytf-display">
+          <h1 className="oytf-display font-hero">
             YOUR ROLE,
             <br />
             <span>YOUR WAY.</span>
