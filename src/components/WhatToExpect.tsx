@@ -33,7 +33,7 @@ export default function WhatToExpect() {
               A full day of ideas, hands-on discovery and the kind of conversations that stick with you.
             </p>
             <a
-              href="#get-involved"
+              href="/register"
               className="inline-flex items-center gap-2 bg-[#171912] text-white px-6 py-3 text-xs font-extrabold tracking-[0.03em] hover:bg-[#46483d] transition-colors"
             >
               Save your spot <span aria-hidden="true">↗</span>

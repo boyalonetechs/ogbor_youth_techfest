@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SectionKicker from "./SectionKicker";
 import { experienceItems } from "./content";
 
@@ -18,9 +19,9 @@ export default function Experience() {
           that stick with you.
         </p>
 
-        <a className="oytf-button" href="#get-involved">
+        <Link className="oytf-button" href="/register">
           Save your spot <span aria-hidden="true">↗</span>
-        </a>
+        </Link>
       </div>
 
       <div className="oytf-experience-right">

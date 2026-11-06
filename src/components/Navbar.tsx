@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#programme", label: "Programme" },
-  { href: "#get-involved", label: "Volunteers" },
-  { href: "#partners", label: "Partners" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#programme", label: "Programme" },
+  { href: "/register", label: "Register" },
+  { href: "/#partners", label: "Partners" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Navbar() {
@@ -75,16 +75,19 @@ export default function Navbar() {
             </a>
           ))}
           <Link
-            href="#get-involved"
+            href="/register"
             onClick={() => setMenuOpen(false)}
             className="mt-1 inline-flex w-full items-center justify-center rounded-sm bg-white px-4 py-2.5 font-rounded font-bold tracking-tight text-black lg:hidden"
           >
             Register Now
           </Link>
         </nav>
-        <button className="hidden rounded-sm cursor-pointer p-2 px-4 bg-white 2xl:px-5 2xl:py-2.5 font-rounded font-bold tracking-tight text-black lg:block">
+        <Link
+          href="/register"
+          className="hidden rounded-sm cursor-pointer p-2 px-4 bg-white 2xl:px-5 2xl:py-2.5 font-rounded font-bold tracking-tight text-black lg:block"
+        >
           Register Now
-        </button>
+        </Link>
         <button
           type="button"
           className="relative flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-sm text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:hidden"
