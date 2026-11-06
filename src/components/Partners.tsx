@@ -68,7 +68,7 @@ export default function Partners() {
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
                   href="mailto:ogboryouthtechfest@gmail.com?subject=Become%20a%20Sponsor"
-                  className="px-5 py-2.5 bg-[#171912] text-white text-xs font-extrabold uppercase tracking-[0.06em] rounded-full hover:bg-[#46483d] transition-colors"
+                  className="px-5 py-2.5 bg-[] text-white text-xs font-extrabold uppercase tracking-[0.06em] rounded-full hover:bg-[#46483d] transition-colors"
                 >
                   Become a Sponsor
                 </a>
