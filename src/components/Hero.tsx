@@ -151,7 +151,7 @@ export default function Hero() {
             height={1448}
             priority
             sizes="(max-width: 1024px) 80vw, 40vw"
-            className="relative  z-10 h-full w-auto max-w-full -scale-x-100 object-contain object-bottom drop-shadow-[0_30px_60px_rgba(5,11,6,0.28)]"
+            className="relative  z-10 h-full w-auto max-w-full -scale-x-100 object-contain object-bottom "
           />
         </div>
       </div>

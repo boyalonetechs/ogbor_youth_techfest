@@ -122,3 +122,64 @@ body {
     animation: none;
   }
 }
+
+/* Overlapping panel stack */
+.panel-stack-card {
+  backface-visibility: hidden;
+}
+
+.panel-stack-content {
+  will-change: transform, opacity;
+}
+
+.panel-stack-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  border-radius: inherit;
+  background: #050b06;
+  opacity: var(--stack-fade, 0);
+  pointer-events: none;
+}
+
+.panel-reveal {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-panel-reveal].is-inview .panel-reveal {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (scripting: none) {
+  .panel-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .panel-stack-card {
+    transform: none;
+  }
+
+  .panel-stack-content {
+    transform: none;
+    opacity: 1;
+  }
+
+  .panel-stack-card::after {
+    opacity: 0;
+  }
+}
