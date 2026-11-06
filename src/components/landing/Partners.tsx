@@ -35,7 +35,7 @@ export default function Partners() {
           <h2 className="font-hero text-[clamp(42px,6vw,76px)] font-[950] leading-[0.86] tracking-[-0.085em] text-balance uppercase">
             INVEST IN
             <br />
-            <span className="text-[var(--hero-green,#00592D)]">
+            <span className="text-[var(--hero-yellow,#FAE01A)]">
               WHAT’S NEXT.
             </span>
           </h2>
@@ -49,7 +49,7 @@ export default function Partners() {
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
-              className="inline-flex items-center justify-center rounded-sm bg-[var(--hero-green,#00592D)] px-6 py-3.5 font-rounded text-sm font-bold text-white transition-colors hover:bg-[#004623]"
+              className="inline-flex items-center justify-center rounded-sm bg-[#050B06] px-6 py-3.5 font-rounded text-sm font-bold text-[var(--hero-yellow,#FAE01A)] transition-colors hover:bg-[#1a2116]"
               href={sponsorMail}
             >
               Become a sponsor <span aria-hidden="true" className="ml-2">↗</span>
