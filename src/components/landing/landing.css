@@ -36,7 +36,6 @@
 .oytf input,
 .oytf select,
 .oytf textarea {
-  color: inherit;
   font: inherit;
 }
 
