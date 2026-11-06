@@ -44,10 +44,9 @@ export default function Footer() {
 
         <div className="oytf-footer-links">
           <span className="oytf-footer-label">FOLLOW THE JOURNEY</span>
-          <a href="#contact">Instagram <Arrow /></a>
-          <a href="#contact">Facebook <Arrow /></a>
-          <a href="#contact">LinkedIn <Arrow /></a>
-          <a href="#contact">TikTok <Arrow /></a>
+          <a href="https://www.instagram.com/dphubandtech?rpxt=NTBnbmowY3Frdmdp&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram <Arrow /></a>
+          <a href="https://www.facebook.com/share/1BpzL4bmZ4/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook <Arrow /></a>
+          <a href="https://www.tiktok.com/@dphubandtech" target="_blank" rel="noopener noreferrer">TikTok <Arrow /></a>
         </div>
       </div>
 
