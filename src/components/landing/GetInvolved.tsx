@@ -121,7 +121,7 @@ export default function GetInvolved() {
         ))}
       </div>
 
-      <div className="oytf-form-shell" id="involvement-forms">
+      <div className="oytf-form-shell hidden" id="involvement-forms">
         <div className="oytf-form-head">
           <div>
             <span className="oytf-form-eyebrow">Registration forms</span>
