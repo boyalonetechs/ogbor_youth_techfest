@@ -10,7 +10,9 @@
   overflow: hidden;
   background: var(--oytf-paper);
   color: var(--oytf-ink);
-  font-family: var(--font-hero), var(--font-faculty-glyphic), var(--font-geist-sans), Georgia, serif;
+  font-family:
+    var(--font-hero), var(--font-faculty-glyphic), var(--font-geist-sans),
+    Georgia, serif;
 }
 
 .oytf *,

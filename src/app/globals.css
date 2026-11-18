@@ -8,6 +8,13 @@
     sans-serif;
   --font-hero:
     var(--font-faculty-glyphic), var(--font-geist-sans), Geist, Georgia, serif;
+
+  --color-brand-ink: #050b06;
+  --color-brand-sun: #fae01a;
+  --color-brand-forest: #00592d;
+  --color-brand-paper: #ffffff;
+  --color-brand-mist: #f2f1e8;
+  --color-brand-muted: #63655c;
 }
 
 :root {

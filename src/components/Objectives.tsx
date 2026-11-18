@@ -63,7 +63,6 @@ export default function Objectives() {
               <p className="text-xs leading-[1.65] text-[#66685f] max-w-[195px]">
                 {item.body}
               </p>
-              <span className="absolute bottom-5 right-5 text-xl">↗</span>
             </article>
           ))}
         </div>
@@ -74,7 +73,11 @@ export default function Objectives() {
             YOU&apos;RE IN THE RIGHT ROOM IF YOU&apos;RE A...
           </span>
           <p className="text-sm font-bold text-[#171912]">
-            Student <i className="text-[#005536] not-italic mx-2">·</i> Graduate <i className="text-[#005536] not-italic mx-2">·</i> Corps member <i className="text-[#005536] not-italic mx-2">·</i> Founder <i className="text-[#005536] not-italic mx-2">·</i> Freelancer <i className="text-[#005536] not-italic mx-2">·</i> Curious mind
+            Student <i className="text-[#005536] not-italic mx-2">·</i> Graduate{" "}
+            <i className="text-[#005536] not-italic mx-2">·</i> Corps member{" "}
+            <i className="text-[#005536] not-italic mx-2">·</i> Founder{" "}
+            <i className="text-[#005536] not-italic mx-2">·</i> Freelancer{" "}
+            <i className="text-[#005536] not-italic mx-2">·</i> Curious mind
           </p>
         </div>
       </div>

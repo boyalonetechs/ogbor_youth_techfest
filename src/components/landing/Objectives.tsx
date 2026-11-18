@@ -10,7 +10,7 @@ export default function Objectives() {
         right="FOUR WAYS WE MOVE FORWARD"
       />
 
-      <h2 className="oytf-display oytf-objectives-title">
+      <h2 className="oytf-display  oytf-objectives-title">
         POTENTIAL, <span>UNLOCKED.</span>
       </h2>
 
@@ -25,9 +25,6 @@ export default function Objectives() {
             </div>
             <h3>{item.title}</h3>
             <p>{item.body}</p>
-            <span className="oytf-objective-arrow" aria-hidden="true">
-              ↗
-            </span>
           </article>
         ))}
       </div>

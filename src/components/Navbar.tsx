@@ -77,14 +77,14 @@ export default function Navbar() {
           <Link
             href="/#get-involved"
             onClick={() => setMenuOpen(false)}
-            className="mt-1 inline-flex w-full items-center justify-center rounded-sm bg-white px-4 py-2.5 font-rounded font-bold tracking-tight text-black lg:hidden"
+            className="mt-1 inline-flex w-full items-center justify-center rounded-sm bg-white px-4 py-2.5 font-rounded font-bold tracking-tight text-black! lg:hidden"
           >
             Register Now
           </Link>
         </nav>
         <Link
           href="/#get-involved"
-          className="hidden rounded-sm cursor-pointer p-2 px-4 bg-white 2xl:px-5 2xl:py-2.5 font-rounded font-bold tracking-tight text-black lg:block"
+          className="hidden rounded-sm cursor-pointer p-2 px-4 bg-white 2xl:px-5 2xl:py-2.5 font-rounded font-bold tracking-tight text-black! lg:block"
         >
           Register Now
         </Link>

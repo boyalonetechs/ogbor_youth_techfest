@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     "Register to attend, volunteer, or exhibit at Ogbor Youth Tech Fest 2026 in Aba, Abia State.",
 };
 
-const GOOGLE_FORMS = {
-  attend: "https://forms.gle/3RqAGVhxS6Vzsg2Z6",
+const REGISTRATION_LINKS = {
+  attend: "/register/attend",
   volunteer: "https://forms.gle/6sgZ4orcfiC254oFA",
   exhibit: "https://forms.gle/F4cdQV1ChMa9Czj68",
 } as const;
@@ -22,7 +22,7 @@ const options = [
     title: "Register to attend",
     description:
       "Be part of 1,000 young people exploring technology, innovation and opportunities in the digital economy.",
-    href: GOOGLE_FORMS.attend,
+    href: REGISTRATION_LINKS.attend,
     cta: "Register to attend",
     tone: "oytf-involve-card--attend",
   },
@@ -32,7 +32,7 @@ const options = [
     title: "Become a volunteer",
     description:
       "Contribute your time, skills and creativity towards delivering an impactful experience for 1,000 young people.",
-    href: GOOGLE_FORMS.volunteer,
+    href: REGISTRATION_LINKS.volunteer,
     cta: "Apply to volunteer",
     tone: "oytf-involve-card--volunteer",
   },
@@ -42,7 +42,7 @@ const options = [
     title: "Exhibit at the tech fest",
     description:
       "Showcase your products, services, innovations and business ideas to an audience of young people, entrepreneurs and professionals.",
-    href: GOOGLE_FORMS.exhibit,
+    href: REGISTRATION_LINKS.exhibit,
     cta: "Apply to exhibit",
     tone: "oytf-involve-card--exhibit",
   },
@@ -65,8 +65,9 @@ export default function RegisterPage() {
             <span>YOUR WAY.</span>
           </h1>
           <p>
-            Choose how you want to be part of Ogbor Youth Tech Fest 2026. Each
-            option opens a short Google Form.
+            Choose how you want to be part of Ogbor Youth Tech Fest 2026. The
+            attendee registration is completed right here; the other options
+            open a short form.
           </p>
         </div>
 
@@ -81,14 +82,20 @@ export default function RegisterPage() {
               </div>
               <h2>{option.title}</h2>
               <p>{option.description}</p>
-              <a
-                href={option.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="oytf-button oytf-card-button"
-              >
-                {option.cta} <span aria-hidden="true">↗</span>
-              </a>
+              {option.href.startsWith("/") ? (
+                <Link href={option.href} className="oytf-button oytf-card-button">
+                  {option.cta} <span aria-hidden="true">↗</span>
+                </Link>
+              ) : (
+                <a
+                  href={option.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="oytf-button oytf-card-button"
+                >
+                  {option.cta} <span aria-hidden="true">↗</span>
+                </a>
+              )}
             </article>
           ))}
         </div>

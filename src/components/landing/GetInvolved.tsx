@@ -1,13 +1,13 @@
 import Link from "next/link";
 import SectionKicker from "./SectionKicker";
 
-const GOOGLE_FORMS = {
-  attend: "https://forms.gle/3RqAGVhxS6Vzsg2Z6",
+const REGISTRATION_LINKS = {
+  attend: "/register/attend",
   volunteer: "https://forms.gle/6sgZ4orcfiC254oFA",
   exhibit: "https://forms.gle/F4cdQV1ChMa9Czj68",
 } as const;
 
-type InvolvementId = keyof typeof GOOGLE_FORMS;
+type InvolvementId = keyof typeof REGISTRATION_LINKS;
 
 type InvolvementCard = {
   id: InvolvementId;
@@ -82,8 +82,8 @@ export default function GetInvolved() {
         </h2>
         <p>
           Whether you want to learn, contribute or showcase your work, there is
-          a place for you at Ogbor Youth Tech Fest 2026. Registration forms are
-          now open on Google Forms.
+          a place for you at Ogbor Youth Tech Fest 2026. Attendee registration
+          is now open on this site.
         </p>
       </div>
 
@@ -109,14 +109,23 @@ export default function GetInvolved() {
               ))}
             </ul>
 
-            <a
-              href={GOOGLE_FORMS[card.id]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="oytf-button oytf-card-button"
-            >
-              {card.cta} <span aria-hidden="true">↗</span>
-            </a>
+            {REGISTRATION_LINKS[card.id].startsWith("/") ? (
+              <Link
+                href={REGISTRATION_LINKS[card.id]}
+                className="oytf-button oytf-card-button"
+              >
+                {card.cta} <span aria-hidden="true">↗</span>
+              </Link>
+            ) : (
+              <a
+                href={REGISTRATION_LINKS[card.id]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="oytf-button oytf-card-button"
+              >
+                {card.cta} <span aria-hidden="true">↗</span>
+              </a>
+            )}
           </article>
         ))}
       </div>
@@ -127,8 +136,8 @@ export default function GetInvolved() {
             <span className="oytf-form-eyebrow">Registration forms</span>
             <h3>Quick links</h3>
             <p>
-              Use the buttons above to open the Google Forms, or visit the full
-              registration page.
+              Use the buttons above to apply, or visit the full registration
+              page.
             </p>
           </div>
           <Link href="/register" className="oytf-button oytf-button--outline">
@@ -136,9 +145,9 @@ export default function GetInvolved() {
           </Link>
         </div>
         <div className="oytf-partner-actions" style={{ marginTop: 16 }}>
-          <a className="oytf-button oytf-button--outline" href={GOOGLE_FORMS.attend} target="_blank" rel="noopener noreferrer">Attend form <span aria-hidden="true">↗</span></a>
-          <a className="oytf-button oytf-button--outline" href={GOOGLE_FORMS.volunteer} target="_blank" rel="noopener noreferrer">Volunteer form <span aria-hidden="true">↗</span></a>
-          <a className="oytf-button oytf-button--outline" href={GOOGLE_FORMS.exhibit} target="_blank" rel="noopener noreferrer">Exhibitor form <span aria-hidden="true">↗</span></a>
+          <Link className="oytf-button oytf-button--outline" href={REGISTRATION_LINKS.attend}>Attend form <span aria-hidden="true">↗</span></Link>
+          <a className="oytf-button oytf-button--outline" href={REGISTRATION_LINKS.volunteer} target="_blank" rel="noopener noreferrer">Volunteer form <span aria-hidden="true">↗</span></a>
+          <a className="oytf-button oytf-button--outline" href={REGISTRATION_LINKS.exhibit} target="_blank" rel="noopener noreferrer">Exhibitor form <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
