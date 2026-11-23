@@ -117,7 +117,7 @@ export default function GetInvolved() {
                 </span>
               </div>
 
-              <h3 className="mb-3 mt-12 max-w-[280px] font-hero text-[clamp(28px,3vw,36px)] font-black uppercase leading-[0.86] tracking-[-0.075em]">
+              <h3 className="mb-3 mt-12 max-w-[280px] font-hero text-[clamp(28px,3vw,36px)] font-black uppercase leading-[0.90] tracking-[-0.075em]">
                 {card.title}
               </h3>
               <p className="max-w-[280px] text-xs leading-[1.7] text-black/65">
