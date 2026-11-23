@@ -10,7 +10,7 @@ export default function SectionKicker({
   right,
 }: SectionKickerProps) {
   return (
-    <div className="flex flex-col gap-2 border-b border-[rgba(5,11,6,0.18)] pb-4 text-[9px] font-extrabold uppercase tracking-[0.13em] text-[#050B06]/70 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-2 border-0 border-[var(--oytf-line)] pb-4 text-[9px] font-extrabold uppercase tracking-[0.13em] text-[var(--color-brand-ink)]/70 sm:flex-row sm:items-center sm:justify-between">
       <span>
         {index} / {label}
       </span>

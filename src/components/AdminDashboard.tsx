@@ -69,6 +69,8 @@ function csvCell(value: Registration[keyof Registration]): string {
   return `"${text}"`;
 }
 
+type RecipientFilter = "all" | "filtered" | "verified" | "unverified";
+
 export default function AdminDashboard({
   initialRegistrations,
   configured,
@@ -87,6 +89,14 @@ export default function AdminDashboard({
   const [lookupResult, setLookupResult] = useState<Registration | null>(null);
   const [lookupError, setLookupError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [mailModalOpen, setMailModalOpen] = useState(false);
+  const [mailSubject, setMailSubject] = useState("");
+  const [mailText, setMailText] = useState("");
+  const [mailHtml, setMailHtml] = useState("");
+  const [mailRecipientFilter, setMailRecipientFilter] = useState<RecipientFilter>("filtered");
+  const [mailSending, setMailSending] = useState(false);
+  const [mailResult, setMailResult] = useState<{ sent: number; failed: number; errors: string[] } | null>(null);
+  const [mailError, setMailError] = useState("");
 
   const phase = !configured ? "error" : !authenticated ? "locked" : "ready";
 
@@ -117,6 +127,95 @@ export default function AdminDashboard({
   async function handleLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
     router.refresh();
+  }
+
+  function getRecipientEmails(): string[] {
+    let rows: Registration[];
+    switch (mailRecipientFilter) {
+      case "all":
+        rows = registrations;
+        break;
+      case "filtered":
+        rows = filtered;
+        break;
+      case "verified":
+        rows = registrations.filter((r) => r.verified_at);
+        break;
+      case "unverified":
+        rows = registrations.filter((r) => !r.verified_at);
+        break;
+    }
+    return rows
+      .map((r) => r.email)
+      .filter((email): email is string => Boolean(email && email.includes("@")));
+  }
+
+  async function handleSendBulkEmail(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMailError("");
+    setMailResult(null);
+
+    const emails = getRecipientEmails();
+    if (emails.length === 0) {
+      setMailError("No valid email recipients found for the selected filter.");
+      return;
+    }
+
+    if (!mailSubject.trim() || !mailText.trim() || !mailHtml.trim()) {
+      setMailError("Subject, text content, and HTML content are required.");
+      return;
+    }
+
+    setMailSending(true);
+    try {
+      const response = await fetch("/api/admin/send-bulk-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: emails,
+          subject: mailSubject.trim(),
+          text: mailText.trim(),
+          html: mailHtml.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const data = (await response.json()) as { error?: string };
+        setMailError(data.error ?? "Failed to send emails.");
+        return;
+      }
+
+      const result = (await response.json()) as {
+        sent: number;
+        failed: number;
+        errors: string[];
+      };
+      setMailResult(result);
+      if (result.failed === 0) {
+        setMailSubject("");
+        setMailText("");
+        setMailHtml("");
+      }
+    } catch {
+      setMailError("Could not reach the server. Try again.");
+    } finally {
+      setMailSending(false);
+    }
+  }
+
+  function openMailModal() {
+    setMailModalOpen(true);
+    setMailError("");
+    setMailResult(null);
+  }
+
+  function closeMailModal() {
+    setMailModalOpen(false);
+    setMailSubject("");
+    setMailText("");
+    setMailHtml("");
+    setMailError("");
+    setMailResult(null);
   }
 
   function handleLookup(event: FormEvent<HTMLFormElement>) {
@@ -266,6 +365,9 @@ export default function AdminDashboard({
             </button>
             <button type="button" className="oytf-button oytf-button--outline" onClick={downloadCsv}>
               DOWNLOAD CSV <span aria-hidden="true">↓</span>
+            </button>
+            <button type="button" className="oytf-button oytf-button--outline" onClick={openMailModal}>
+              COMPOSE EMAIL <span aria-hidden="true">✉</span>
             </button>
             <button type="button" className="oytf-admin-signout" onClick={() => void handleLogout()}>
               Sign out

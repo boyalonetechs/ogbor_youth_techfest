@@ -100,3 +100,77 @@ export async function sendRegistrationEmail({
     return { sent: false, skipped: false };
   }
 }
+
+export type BulkEmailOptions = {
+  to: string[];
+  subject: string;
+  text: string;
+  html: string;
+};
+
+export async function sendBulkEmail({
+  to,
+  subject,
+  text,
+  html,
+}: BulkEmailOptions): Promise<{ sent: number; failed: number; errors: string[] }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+
+  if (!apiKey || !from) {
+    return { sent: 0, failed: to.length, errors: ["Email not configured"] };
+  }
+
+  if (to.length === 0) {
+    return { sent: 0, failed: 0, errors: ["No recipients"] };
+  }
+
+  let sent = 0;
+  let failed = 0;
+  const errors: string[] = [];
+
+  // Send in batches to avoid rate limits
+  const batchSize = 10;
+  for (let i = 0; i < to.length; i += batchSize) {
+    const batch = to.slice(i, i + batchSize);
+    
+    await Promise.all(
+      batch.map(async (email) => {
+        try {
+          const response = await fetch(RESEND_API_URL, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from,
+              to: [email],
+              subject,
+              text,
+              html,
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            failed++;
+            errors.push(`${email}: ${errorData.message || response.status}`);
+          } else {
+            sent++;
+          }
+        } catch (error) {
+          failed++;
+          errors.push(`${email}: ${error instanceof Error ? error.message : "Unknown error"}`);
+        }
+      })
+    );
+
+    // Small delay between batches to avoid rate limiting
+    if (i + batchSize < to.length) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  }
+
+  return { sent, failed, errors };
+}
