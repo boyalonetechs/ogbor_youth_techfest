@@ -8,7 +8,7 @@
 
   position: relative;
   overflow: hidden;
-  background: var(--oytf-paper);
+  background: var(--oytf-lime);
   color: var(--oytf-ink);
   font-family:
     var(--font-hero), var(--font-faculty-glyphic), var(--font-geist-sans),
@@ -89,7 +89,7 @@
 }
 
 .oytf-display span {
-  color: #989c8b;
+  color: #fff;
 }
 
 .oytf-display--paper span {
@@ -161,7 +161,7 @@
 
 /* About ---------------------------------------------------------------- */
 .oytf-about {
-  background: color-mix(in srgb, var(--oytf-green) 10%, var(--oytf-paper));
+  background: transparent;
 }
 
 .oytf-intro-grid {
@@ -226,7 +226,7 @@
 
 /* Objectives ----------------------------------------------------------- */
 .oytf-objectives {
-  background: var(--oytf-paper);
+  background: transparent;
 }
 
 .oytf-objectives-title {
@@ -242,16 +242,17 @@
 .oytf-objective-card {
   position: relative;
   min-height: 222px;
-  border: 1px solid var(--oytf-line);
+  border: 1px solid var(--oytf-ink);
   padding: 19px;
-  background: transparent;
+  background: var(--oytf-ink);
+  box-shadow: 8px 8px 0 var(--oytf-green);
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
 .oytf-objective-card:hover {
-  background: #e9e8df;
+  background: #12140f;
   transform: translateY(-3px);
 }
 
@@ -294,6 +295,26 @@
   bottom: 17px;
   font-size: 15px;
   line-height: 1;
+}
+
+.oytf-objective-top {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.oytf-objective-icon {
+  color: #7fd6a3;
+}
+
+.oytf-objective-card h3 {
+  color: #fff;
+}
+
+.oytf-objective-card p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.oytf-objective-arrow {
+  color: #fff;
 }
 
 /* Programme ------------------------------------------------------------ */
@@ -462,15 +483,23 @@
   line-height: 1.7;
 }
 
-.oytf-involve-card .oytf-card-button,
 .oytf-experience .oytf-button {
   background: var(--oytf-ink);
   color: #fff;
 }
 
-.oytf-involve-card .oytf-card-button:hover,
 .oytf-experience .oytf-button:hover {
   background: #46483d;
+  color: #fff;
+}
+
+.oytf-involve-card .oytf-card-button {
+  background: var(--oytf-green);
+  color: #fff;
+}
+
+.oytf-involve-card .oytf-card-button:hover {
+  background: #007a3d;
   color: #fff;
 }
 
@@ -531,7 +560,7 @@
 
 /* Get involved --------------------------------------------------------- */
 .oytf-involved {
-  background: color-mix(in srgb, var(--oytf-lime) 14%, var(--oytf-paper));
+  background: transparent;
 }
 
 .oytf-involved-heading {
@@ -561,20 +590,17 @@
   display: flex;
   flex-direction: column;
   min-height: 380px;
+  border: 1px solid var(--oytf-ink);
   padding: 24px;
-  color: var(--oytf-ink);
+  background: var(--oytf-ink);
+  box-shadow: 8px 8px 0 var(--oytf-green);
+  color: #fff;
 }
 
-.oytf-involve-card--attend {
-  background: var(--oytf-lime);
-}
-
-.oytf-involve-card--volunteer {
-  background: color-mix(in srgb, var(--oytf-green) 14%, var(--oytf-paper));
-}
-
+.oytf-involve-card--attend,
+.oytf-involve-card--volunteer,
 .oytf-involve-card--exhibit {
-  background: color-mix(in srgb, var(--oytf-green) 24%, var(--oytf-paper));
+  background: var(--oytf-ink);
 }
 
 .oytf-involve-top {
@@ -639,6 +665,25 @@
   color: var(--oytf-green);
   font-size: 18px;
   line-height: 0;
+}
+
+.oytf-involve-index,
+.oytf-involve-icon,
+.oytf-involve-card h3 {
+  color: #fff;
+}
+
+.oytf-involve-card > p {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.oytf-involve-list li {
+  border-top-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.oytf-involve-list li::before {
+  color: #7fd6a3;
 }
 
 .oytf-card-button {
@@ -874,9 +919,99 @@
   line-height: 1.6;
 }
 
+/* Dark form card ------------------------------------------------------- */
+.oytf-form-shell {
+  border-color: var(--oytf-ink);
+  background: var(--oytf-ink);
+  box-shadow: 8px 8px 0 var(--oytf-green);
+  color: #fff;
+}
+
+.oytf-form-tabs {
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+  background: #12140f;
+}
+
+.oytf-form-tab {
+  border-right-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.oytf-form-tab:hover {
+  background: #1c1f18;
+  color: #fff;
+}
+
+.oytf-form-tab[aria-selected="true"],
+.oytf-form-tab[aria-selected="true"]:hover {
+  background: var(--oytf-green);
+  color: #fff;
+}
+
+.oytf-form-eyebrow,
+.oytf-form-head p,
+.oytf-form-badge,
+.oytf-field label,
+.oytf-form-note {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.oytf-form-head h3 {
+  color: #fff;
+}
+
+.oytf-form-badge {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.oytf-field input,
+.oytf-field select,
+.oytf-field textarea {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: #0b0d09;
+  color: #fff;
+}
+
+.oytf-field input::placeholder,
+.oytf-field textarea::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.oytf-field select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.7) 50%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.7) 50%, transparent 50%);
+}
+
+.oytf-form-foot {
+  border-top-color: rgba(255, 255, 255, 0.18);
+}
+
+.oytf-form-note a,
+.oytf-form-note span {
+  color: #7fd6a3;
+}
+
+.oytf-form-status {
+  border-left-color: #7fd6a3;
+  background: rgba(0, 89, 45, 0.35);
+  color: #fff;
+}
+
+.oytf-form-shell .oytf-button {
+  background: var(--oytf-green);
+  color: #fff;
+}
+
+.oytf-form-shell .oytf-button--outline {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: #fff;
+}
+
 /* Partners ------------------------------------------------------------- */
 .oytf-partners {
-  background: color-mix(in srgb, var(--oytf-green) 8%, var(--oytf-paper));
+  background: transparent;
 }
 
 .oytf-partners-grid {
@@ -1108,7 +1243,7 @@
 
 /* FAQ ------------------------------------------------------------------ */
 .oytf-faq {
-  background: var(--oytf-paper);
+  background: transparent;
 }
 
 .oytf-faq-grid {
