@@ -46,6 +46,10 @@ No attendee list is shown in a permanent sidebar.
    registration still succeeds and the code is shown in the popup, but no email
    is sent.
 
+   For hosted Postgres that requires TLS, use `?sslmode=verify-full` in
+   `DATABASE_URL`. The older `sslmode=require` value behaves the same way with
+   the current `pg` driver but prints a deprecation warning.
+
 3. Create the table (run this against the same database as `DATABASE_URL`):
 
    ```bash

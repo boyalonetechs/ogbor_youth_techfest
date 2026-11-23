@@ -65,92 +65,147 @@ const cards: InvolvementCard[] = [
   },
 ];
 
+const CARD_BUTTON =
+  "mt-auto inline-flex w-full items-center justify-between gap-4 border border-black bg-black px-[19px] py-[15px] font-rounded text-[10px] font-extrabold uppercase leading-none tracking-[0.03em] text-white! transition-colors duration-200 hover:bg-white hover:text-black! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black";
+
+const OUTLINE_LINK =
+  "inline-flex items-center justify-center gap-4 border border-black bg-transparent px-4 py-3 font-rounded text-[9px] font-extrabold uppercase leading-none tracking-[0.03em] text-black transition-colors duration-200 hover:bg-black hover:text-white! focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black";
+
 export default function GetInvolved() {
   return (
-    <section className="oytf-section oytf-involved" id="get-involved">
-      <SectionKicker
-        index="05"
-        label="GET INVOLVED"
-        right="THREE WAYS TO BE PART OF IT"
-      />
-
-      <div className="oytf-involved-heading">
-        <h2 className="oytf-display">
-          YOUR ROLE,
-          <br />
-          <span>YOUR WAY.</span>
-        </h2>
-        <p>
-          Whether you want to learn, contribute or showcase your work, there is
-          a place for you at Ogbor Youth Tech Fest 2026. Attendee registration
-          is now open on this site.
-        </p>
-      </div>
-
-      <div className="oytf-involve-grid">
-        {cards.map((card) => (
-          <article
-            className={`oytf-involve-card oytf-involve-card--${card.tone}`}
-            key={card.id}
-          >
-            <div className="oytf-involve-top">
-              <span className="oytf-involve-index">{card.index}</span>
-              <span className="oytf-involve-icon" aria-hidden="true">
-                {card.icon}
-              </span>
-            </div>
-
-            <h3>{card.title}</h3>
-            <p>{card.body}</p>
-
-            <ul className="oytf-involve-list">
-              {card.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
-              ))}
-            </ul>
-
-            {REGISTRATION_LINKS[card.id].startsWith("/") ? (
-              <Link
-                href={REGISTRATION_LINKS[card.id]}
-                className="oytf-button oytf-card-button"
-              >
-                {card.cta} <span aria-hidden="true">↗</span>
-              </Link>
-            ) : (
-              <a
-                href={REGISTRATION_LINKS[card.id]}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="oytf-button oytf-card-button"
-              >
-                {card.cta} <span aria-hidden="true">↗</span>
-              </a>
-            )}
-          </article>
-        ))}
-      </div>
-
-      <div className="oytf-form-shell hidden" id="involvement-forms">
-        <div className="oytf-form-head">
-          <div>
-            <span className="oytf-form-eyebrow">Registration forms</span>
-            <h3>Quick links</h3>
-            <p>
-              Use the buttons above to apply, or visit the full registration
-              page.
-            </p>
-          </div>
-          <Link href="/register" className="oytf-button oytf-button--outline">
-            Open registration page <span aria-hidden="true">↗</span>
-          </Link>
+    <section
+      id="get-involved"
+      className="border-y border-black bg-brand-sun px-[5%] py-[88px] text-brand-ink"
+    >
+      <div className="mx-auto w-full max-w-[1120px]">
+        <div className="[&>div]:border-black/20 [&>div]:text-black/65">
+          <SectionKicker
+            index="05"
+            label="GET INVOLVED"
+            right="THREE WAYS TO BE PART OF IT"
+          />
         </div>
-        <div className="oytf-partner-actions" style={{ marginTop: 16 }}>
-          <Link className="oytf-button oytf-button--outline" href={REGISTRATION_LINKS.attend}>Attend form <span aria-hidden="true">↗</span></Link>
-          <a className="oytf-button oytf-button--outline" href={REGISTRATION_LINKS.volunteer} target="_blank" rel="noopener noreferrer">Volunteer form <span aria-hidden="true">↗</span></a>
-          <a className="oytf-button oytf-button--outline" href={REGISTRATION_LINKS.exhibit} target="_blank" rel="noopener noreferrer">Exhibitor form <span aria-hidden="true">↗</span></a>
+
+        <div className="mb-10 mt-10 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
+          <h2 className="font-hero text-[clamp(42px,6vw,76px)] font-black uppercase leading-[0.86] tracking-[-0.085em] text-brand-ink">
+            YOUR ROLE,
+            <br />
+            <span className="text-brand-forest">YOUR WAY.</span>
+          </h2>
+          <p className="mb-1 max-w-[360px] text-[13px] leading-[1.7] text-black/65">
+            Whether you want to learn, contribute or showcase your work, there
+            is a place for you at Ogbor Youth Tech Fest 2026. Attendee
+            registration is now open on this site.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {cards.map((card) => (
+            <article
+              key={card.id}
+              className="relative flex min-h-[380px] flex-col border border-black bg-white p-6 text-brand-ink shadow-[8px_8px_0_#000]"
+            >
+              <div className="flex items-start justify-between gap-5">
+                <span className="text-[8px] font-black tracking-[0.12em] text-black/60">
+                  {card.index}
+                </span>
+                <span
+                  className="text-3xl leading-[0.8] text-brand-forest"
+                  aria-hidden="true"
+                >
+                  {card.icon}
+                </span>
+              </div>
+
+              <h3 className="mb-3 mt-12 max-w-[280px] font-hero text-[clamp(28px,3vw,36px)] font-black uppercase leading-[0.86] tracking-[-0.075em]">
+                {card.title}
+              </h3>
+              <p className="max-w-[280px] text-xs leading-[1.7] text-black/65">
+                {card.body}
+              </p>
+
+              <ul className="mb-[26px] mt-5 flex list-none flex-col p-0">
+                {card.highlights.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="flex items-center gap-2.5 border-t border-black/15 py-2 text-[10.5px] font-bold leading-[1.3] text-black/75"
+                  >
+                    <span
+                      className="text-lg leading-none text-brand-forest"
+                      aria-hidden="true"
+                    >
+                      ·
+                    </span>
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+
+              {REGISTRATION_LINKS[card.id].startsWith("/") ? (
+                <Link
+                  href={REGISTRATION_LINKS[card.id]}
+                  className={CARD_BUTTON}
+                >
+                  {card.cta} <span aria-hidden="true">↗</span>
+                </Link>
+              ) : (
+                <a
+                  href={REGISTRATION_LINKS[card.id]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={CARD_BUTTON}
+                >
+                  {card.cta} <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </article>
+          ))}
+        </div>
+
+        <div
+          className="mt-12 hidden border-2 border-black bg-white p-6 text-brand-ink shadow-[8px_8px_0_#000]"
+          id="involvement-forms"
+        >
+          <div className="mb-7 flex flex-col items-start justify-between gap-6 xl:flex-row">
+            <div>
+              <span className="mb-2.5 block text-[8px] font-black uppercase tracking-[0.12em] text-black/60">
+                Registration forms
+              </span>
+              <h3 className="mb-2 text-[clamp(26px,3vw,38px)] font-black uppercase leading-[0.9] tracking-[-0.075em]">
+                Quick links
+              </h3>
+              <p className="max-w-[620px] text-xs leading-[1.7] text-black/65">
+                Use the buttons above to apply, or visit the full registration
+                page.
+              </p>
+            </div>
+            <Link href="/register" className={OUTLINE_LINK}>
+              Open registration page <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link href={REGISTRATION_LINKS.attend} className={OUTLINE_LINK}>
+              Attend form <span aria-hidden="true">↗</span>
+            </Link>
+            <a
+              href={REGISTRATION_LINKS.volunteer}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={OUTLINE_LINK}
+            >
+              Volunteer form <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              href={REGISTRATION_LINKS.exhibit}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={OUTLINE_LINK}
+            >
+              Exhibitor form <span aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-

@@ -12,14 +12,6 @@ type AdminDashboardProps = {
   today: string;
 };
 
-type RegistrationTab = "attendees" | "volunteers" | "exhibitors";
-
-const TABS: { id: RegistrationTab; label: string }[] = [
-  { id: "attendees", label: "Attendees" },
-  { id: "volunteers", label: "Volunteers" },
-  { id: "exhibitors", label: "Exhibitors" },
-];
-
 type SortKey =
   | "created_desc"
   | "created_asc"
@@ -89,7 +81,6 @@ export default function AdminDashboard({
   const registrations = initialRegistrations;
   const [search, setSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<RegistrationTab>("attendees");
   const [selectedCode, setSelectedCode] = useState("");
   const [codeInput, setCodeInput] = useState("");
   const [sortBy, setSortBy] = useState<SortKey>("created_desc");
@@ -195,7 +186,7 @@ export default function AdminDashboard({
     }
   }, [filtered, sortBy]);
 
-  const sheetRegistrations = activeTab === "attendees" ? sorted : [];
+  const sheetRegistrations = sorted;
 
   function downloadCsv() {
     const header = COLUMNS.map((column) => csvCell(column.label)).join(",");
@@ -327,20 +318,6 @@ export default function AdminDashboard({
         </section>
 
         <div className="oytf-admin-sheet">
-          <div className="oytf-admin-sheet-tabs" role="tablist" aria-label="Registration category">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === tab.id}
-                className={`oytf-admin-sheet-tab${activeTab === tab.id ? " is-active" : ""}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
           <div className="oytf-admin-sheet-bar">
             <span>REGISTRATION SHEET</span>
             <label className="oytf-admin-sort">
@@ -392,11 +369,7 @@ export default function AdminDashboard({
               </tbody>
             </table>
             {sheetRegistrations.length === 0 && (
-              <p className="oytf-admin-empty">
-                {activeTab === "attendees"
-                  ? "No registrations yet."
-                  : `No ${TABS.find((tab) => tab.id === activeTab)?.label.toLowerCase()} registrations imported yet.`}
-              </p>
+              <p className="oytf-admin-empty">No registrations yet.</p>
             )}
           </div>
         </div>

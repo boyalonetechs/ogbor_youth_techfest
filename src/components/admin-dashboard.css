@@ -1,5 +1,6 @@
-.oytf-admin-page {
-  background: var(--oytf-paper);
+.oytf.oytf-admin-page {
+  background: var(--oytf-lime);
+  color: var(--oytf-ink);
 }
 
 .oytf-admin-topbar {
@@ -13,6 +14,7 @@
 }
 
 .oytf-admin-topbar strong {
+  color: var(--oytf-ink);
   font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   font-size: 18px;
   letter-spacing: -0.06em;
@@ -30,10 +32,15 @@
 }
 
 .oytf-admin-topbar nav a {
-  color: #5f6159;
+  color: var(--oytf-muted);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.oytf-admin-topbar nav a:hover {
+  color: var(--oytf-green);
 }
 
 .oytf-admin-state {
@@ -41,6 +48,7 @@
   min-height: 70vh;
   place-items: center;
   padding: 40px 5%;
+  color: #fff;
   font-family: var(--font-nunito), "Nunito", ui-rounded, sans-serif;
 }
 
@@ -48,8 +56,9 @@
   width: min(100%, 420px);
   border: 1px solid var(--oytf-line);
   background: var(--oytf-paper);
-  box-shadow: 10px 10px 0 rgba(0, 85, 54, 0.08);
+  box-shadow: 10px 10px 0 var(--oytf-green);
   padding: 34px;
+  color: var(--oytf-ink);
 }
 
 .oytf-admin-login > span {
@@ -124,11 +133,25 @@
   gap: 8px;
 }
 
+.oytf-admin-header-actions .oytf-button,
+.oytf-admin-header-actions .oytf-button--outline {
+  border: 1px solid var(--oytf-ink);
+  background: var(--oytf-ink);
+  color: #fff !important;
+}
+
+.oytf-admin-header-actions .oytf-button:hover,
+.oytf-admin-header-actions .oytf-button--outline:hover {
+  border-color: var(--oytf-green);
+  background: var(--oytf-green);
+  color: #fff !important;
+}
+
 .oytf-admin-signout {
   border: 0;
   background: transparent;
   padding: 6px 2px;
-  color: #66685f;
+  color: var(--oytf-muted);
   font: inherit;
   font-size: 10px;
   font-weight: 800;
@@ -148,12 +171,13 @@
   gap: 10px;
   margin: -10px 0 22px;
   border: 1px solid var(--oytf-line);
-  background: rgba(0, 85, 54, 0.06);
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--oytf-green);
   padding: 12px 14px;
 }
 
 .oytf-admin-search-panel label {
-  color: #5f6159;
+  color: var(--oytf-muted);
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.1em;
@@ -176,7 +200,7 @@
 }
 
 .oytf-admin-search-panel span {
-  color: #66685f;
+  color: var(--oytf-muted);
   font-size: 10px;
   font-weight: 800;
 }
@@ -203,6 +227,7 @@
 
 .oytf-admin-header h1 {
   margin: 10px 0 6px;
+  color: var(--oytf-ink);
   font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   font-size: clamp(30px, 4vw, 48px);
   letter-spacing: -0.075em;
@@ -211,7 +236,7 @@
 
 .oytf-admin-header p {
   margin: 0;
-  color: #66685f;
+  color: var(--oytf-muted);
   font-size: 12px;
 }
 
@@ -224,12 +249,14 @@
 
 .oytf-admin-stats > div {
   border: 1px solid var(--oytf-line);
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--oytf-green);
   padding: 16px;
 }
 
 .oytf-admin-stats strong {
   display: block;
-  color: var(--oytf-green);
+  color: var(--oytf-ink);
   font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   font-size: 32px;
   letter-spacing: -0.07em;
@@ -237,7 +264,7 @@
 }
 
 .oytf-admin-stats span {
-  color: #66685f;
+  color: var(--oytf-muted);
   font-size: 10px;
   font-weight: 800;
   text-transform: uppercase;
@@ -250,13 +277,25 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  border-left: 3px solid var(--oytf-green);
-  background: rgba(0, 85, 54, 0.06);
+  border: 1px solid var(--oytf-line);
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--oytf-green);
   padding: 18px 20px;
+}
+
+.oytf-admin-verify::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--oytf-green);
 }
 
 .oytf-admin-verify h2 {
   margin: 0 0 4px;
+  color: var(--oytf-ink);
   font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   font-size: 15px;
   letter-spacing: -0.04em;
@@ -299,7 +338,7 @@
   border: 0;
   background: transparent;
   padding: 0;
-  color: #66685f;
+  color: var(--oytf-muted);
   font: inherit;
   font-size: 10px;
   text-decoration: underline;
@@ -310,6 +349,7 @@
   margin-top: 26px;
   border: 1px solid var(--oytf-line);
   background: #fff;
+  color: var(--oytf-ink);
 }
 
 .oytf-admin-sheet-tabs {
@@ -317,22 +357,26 @@
   flex-wrap: wrap;
   gap: 2px;
   border-bottom: 1px solid var(--oytf-line);
-  background: #f4f3ec;
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--oytf-green);
   padding: 8px 10px 0;
+  margin-bottom: -1px;
 }
 
 .oytf-admin-sheet-tab {
-  border: 1px solid transparent;
+  border: 1px solid var(--oytf-line);
   border-bottom: 0;
-  background: transparent;
+  background: #fff;
   padding: 7px 14px;
-  color: #6b6d64;
+  color: var(--oytf-muted);
   font: inherit;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+  box-shadow: 2px -2px 0 var(--oytf-green);
+  margin-bottom: -1px;
 }
 
 .oytf-admin-sheet-tab:hover {
@@ -343,6 +387,7 @@
   border-color: var(--oytf-line);
   background: #fff;
   color: var(--oytf-green);
+  box-shadow: 2px -2px 0 var(--oytf-green);
 }
 
 .oytf-admin-sheet-bar {
@@ -351,9 +396,10 @@
   justify-content: space-between;
   gap: 14px;
   border-bottom: 1px solid var(--oytf-line);
-  background: #e9e8df;
+  background: #fff;
+  box-shadow: 4px 4px 0 var(--oytf-green);
   padding: 10px 14px;
-  color: #5f6159;
+  color: var(--oytf-muted);
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.1em;
@@ -408,9 +454,9 @@
 .oytf-admin-sheet th {
   position: sticky;
   top: 0;
-  z-index: 2;
-  background: #f4f3ec;
-  color: #4f5147;
+  z-index: 10;
+  background: #fff;
+  color: var(--oytf-ink);
   font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   font-size: 9px;
   font-weight: 900;
@@ -422,15 +468,18 @@
 .oytf-admin-sheet td:first-child {
   position: sticky;
   left: 0;
-  z-index: 1;
   background: #fff;
   font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   font-weight: 700;
 }
 
+.oytf-admin-sheet td:first-child {
+  z-index: 5;
+}
+
 .oytf-admin-sheet th:first-child {
-  z-index: 3;
-  background: #f4f3ec;
+  z-index: 15;
+  background: #fff;
 }
 
 .oytf-admin-sheet tbody tr:nth-child(even) td {
@@ -439,7 +488,7 @@
 
 .oytf-admin-sheet tbody tr:hover td,
 .oytf-admin-sheet tbody tr.is-active td {
-  background: rgba(250, 224, 26, 0.18);
+  background: rgba(0, 89, 45, 0.1);
 }
 
 .oytf-admin-pill {
@@ -475,6 +524,11 @@
   background: var(--oytf-paper);
   box-shadow: 10px 10px 0 var(--oytf-green);
   padding: 30px;
+  color: var(--oytf-ink);
+}
+
+.oytf-admin-modal .oytf-admin-eyebrow {
+  color: var(--oytf-green);
 }
 
 .oytf-admin-modal h2 {

@@ -1,5 +1,7 @@
 "use client";
 
+import SectionKicker from "./landing/SectionKicker";
+
 const objectives = [
   {
     n: "01",
@@ -29,38 +31,41 @@ const objectives = [
 
 export default function Objectives() {
   return (
-    <section className="py-20 md:py-32 px-6 md:px-12 lg:px-20 bg-[#f5f3eb]">
-      <div className="max-w-7xl mx-auto">
-        {/* Section kicker */}
-        <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[#171912]/18">
-          <span className="text-xs font-extrabold tracking-[0.13em] uppercase text-[#66685f]">
-            02 / THE MISSION
-          </span>
-          <span className="text-xs font-extrabold tracking-[0.13em] uppercase text-[#66685f]">
-            FOUR WAYS WE MOVE FORWARD
-          </span>
-        </div>
+    <section className="bg-[#f5f3eb] px-[5%] py-[88px] text-brand-ink">
+      <div className="mx-auto w-full max-w-[1120px]">
+        <SectionKicker
+          index="02"
+          label="THE MISSION"
+          right="FOUR WAYS WE MOVE FORWARD"
+        />
 
         {/* Section title */}
-        <h2 className="font-[950] leading-[0.86] tracking-[-0.085em] text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-10">
-          POTENTIAL, <span className="text-[#989c8b]">UNLOCKED.</span>
+        <h2 className="font-hero text-[clamp(42px,6vw,76px)] font-black uppercase leading-[0.86] tracking-[-0.085em] mb-10 text-balance">
+          POTENTIAL, <span className="text-brand-muted">UNLOCKED.</span>
         </h2>
 
         {/* Objectives grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {objectives.map((item) => (
             <article
               key={item.n}
-              className="relative min-h-[212px] border border-[#171912]/18 p-5 hover:bg-[#e9e8df] hover:-translate-y-1 transition-all duration-200"
+              className="relative flex flex-col min-h-[240px] border border-black bg-white p-6 text-brand-ink shadow-[8px_8px_0_#000]"
             >
-              <div className="flex justify-between text-xs font-extrabold text-[#76786e] mb-8">
-                <span>{item.n}</span>
-                <span className="text-3xl text-[#005536]">{item.icon}</span>
+              <div className="flex items-start justify-between gap-5">
+                <span className="text-[8px] font-black tracking-[0.12em] text-black/60">
+                  0{item.n}
+                </span>
+                <span
+                  className="text-3xl leading-[0.8] text-brand-forest"
+                  aria-hidden="true"
+                >
+                  {item.icon}
+                </span>
               </div>
-              <h3 className="text-lg font-extrabold leading-[1.02] tracking-[-0.05em] uppercase mb-3">
+              <h3 className="mb-3 mt-8 font-hero text-[clamp(22px,2.5vw,28px)] font-black uppercase leading-[0.86] tracking-[-0.05em]">
                 {item.title}
               </h3>
-              <p className="text-xs leading-[1.65] text-[#66685f] max-w-[195px]">
+              <p className="text-xs leading-[1.7] text-black/65">
                 {item.body}
               </p>
             </article>
@@ -68,16 +73,16 @@ export default function Objectives() {
         </div>
 
         {/* Audience */}
-        <div className="pt-6 border-t border-[#171912]/18">
-          <span className="text-xs font-extrabold tracking-[0.11em] uppercase text-[#717269] block mb-2">
+        <div className="pt-6 border-t border-black/15">
+          <span className="text-[8px] font-black uppercase tracking-[0.12em] text-black/60 block mb-2">
             YOU&apos;RE IN THE RIGHT ROOM IF YOU&apos;RE A...
           </span>
-          <p className="text-sm font-bold text-[#171912]">
-            Student <i className="text-[#005536] not-italic mx-2">·</i> Graduate{" "}
-            <i className="text-[#005536] not-italic mx-2">·</i> Corps member{" "}
-            <i className="text-[#005536] not-italic mx-2">·</i> Founder{" "}
-            <i className="text-[#005536] not-italic mx-2">·</i> Freelancer{" "}
-            <i className="text-[#005536] not-italic mx-2">·</i> Curious mind
+          <p className="text-sm font-bold text-black">
+            Student <span className="text-brand-forest not-italic mx-2">·</span> Graduate{" "}
+            <span className="text-brand-forest not-italic mx-2">·</span> Corps member{" "}
+            <span className="text-brand-forest not-italic mx-2">·</span> Founder{" "}
+            <span className="text-brand-forest not-italic mx-2">·</span> Freelancer{" "}
+            <span className="text-brand-forest not-italic mx-2">·</span> Curious mind
           </p>
         </div>
       </div>
