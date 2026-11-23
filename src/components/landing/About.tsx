@@ -4,7 +4,7 @@ import { attendeeRoles } from "./content";
 export default function About() {
   return (
     <section
-      className="bg-[var(--color-brand-sun)] px-[5%] py-[88px] text-[var(--color-brand-ink)] lg:px-[max(5%,calc((100%-1120px)/2))]"
+      className="bg-[var(--color-brand-ink)] px-[5%] py-[88px] text-[var(--color-brand-paper)] lg:px-[max(5%,calc((100%-1120px)/2))]"
       id="about"
     >
       <SectionKicker
