@@ -406,7 +406,7 @@ export default function AdminDashboard({
             <input
               type="text"
               value={codeInput}
-              placeholder="OYTF-2026-0002 or OYTF-26-XXXXXXXX"
+              placeholder="OYTF-2026-0091"
               aria-label="Registration code"
               onChange={(event) => setCodeInput(event.target.value)}
             />

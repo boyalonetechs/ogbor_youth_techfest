@@ -6,7 +6,7 @@ The attendee form lives at `/register/attend`. Submissions are validated in the
 browser and again on the server, then stored in PostgreSQL through the
 `/api/attendee` route handler.
 
-Every successful registration generates a unique code (`OYTF-26-XXXXXXXX`) that
+Every successful registration generates a unique code (`OYTF-2026-0091`) that
 is stored in the database and shown in a popup with a copy button. When Resend
 is configured, the same code is emailed to the attendee. Use it at the event
 entrance to look the attendee up from the admin dashboard. Digital skills,
