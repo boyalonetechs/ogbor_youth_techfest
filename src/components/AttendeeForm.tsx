@@ -695,7 +695,7 @@ export default function AttendeeForm() {
       {/* Fixed horizontal section bar for Mobile & Tablet (< xl) */}
       <nav
         aria-label="Registration sections"
-        className="fixed inset-x-0 top-16 z-40 border-b border-brand-ink/15 bg-brand-paper/95 py-4 backdrop-blur-sm xl:hidden"
+        className="fixed inset-x-0 top-16 z-40 border-b border-brand-ink/15 bg-brand-paper/95 py-4 hidden backdrop-blur-sm xl:hidden"
       >
         <div className="mx-auto flex max-w-5xl items-center gap-2 overflow-x-auto px-4 py-3 no-scrollbar sm:px-8">
           {SECTIONS.map((section, index) => (
@@ -714,7 +714,7 @@ export default function AttendeeForm() {
       </nav>
 
       {/* Main layout grid: reserves left column space on xl while keeping nav fixed */}
-      <div className="grid pt-32 xl:grid-cols-[260px_minmax(0,1fr)] xl:gap-14 xl:pt-0">
+      <div className="grid pt-0 xl:grid-cols-[260px_minmax(0,1fr)] xl:gap-14 xl:pt-0">
         <aside className="hidden xl:block">
           <div className="fixed top-30 w-[260px] max-h-[calc(100vh-5rem)] overflow-y-auto pr-4">
             <div className="mb-6">
