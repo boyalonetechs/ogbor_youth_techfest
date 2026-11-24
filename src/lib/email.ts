@@ -45,31 +45,61 @@ export async function sendRegistrationEmail({
   const safeCode = escapeHtml(code);
 
   const text = [
-    `Hi ${name},`,
+    `Hello ${name}!`,
     "",
-    "Your registration for Ogbor Youth Tech Fest 2026 is complete.",
+    "Thank you for registering for Ogbor Youth Tech Fest 2026!",
     "",
-    `Your registration code is: ${code}`,
+    "We noticed that your registration confirmation email may not have reached your inbox. Not to worry, we've got you covered!",
     "",
-    "Present this code at the festival entrance for fast check-in.",
+    "Your registration was successfully received, and we're sharing your official Registration ID with you here:",
     "",
-    "See you there!",
-    "Ogbor Youth Tech Fest 2026",
+    "YOUR REGISTRATION ID:",
+    code,
+    "",
+    "Please save this message and keep your Registration ID safe. You will need it for identification and check-in at the event.",
+    "",
+    "Date: Monday, 30 November 2026",
+    "Venue: Word of Faith Group of Schools, 39 Umuola Road, Ogbor Hill, Aba",
+    "Time: 10am",
+    "",
+    "Please keep your Registration ID safe. You may need it when checking in at the event. It will also help our team locate your registration if you contact us.",
+    "",
+    "Get ready to explore practical digital skills, Artificial Intelligence, career opportunities, entrepreneurship and ways to earn through skills.",
+    "",
+    "Questions? Contact us at 08063917367 or send an email to ogboryouthtechfest@gmail.com.",
+    "",
+    "We look forward to seeing you!",
+    "",
+    "The Ogbor Youth Tech Fest Team",
+    "",
+    "UNLOCKING A NEW DIGITAL ERA.",
   ].join("\n");
 
   const html = `
-    <div style="font-family:Arial,sans-serif;color:#050b06;line-height:1.6">
+    <div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;color:#050b06;line-height:1.6">
       <p style="color:#00592d;font-weight:700;letter-spacing:.08em;font-size:12px">
         OGBOR YOUTH TECH FEST 2026
       </p>
-      <h1 style="font-size:24px;margin:8px 0 16px">Hi ${safeName},</h1>
-      <p>Your registration is complete. Present the code below at the festival entrance for fast check-in.</p>
+      <h1 style="font-size:24px;margin:8px 0 16px">Hello ${safeName}!</h1>
+      <p>Thank you for registering for Ogbor Youth Tech Fest 2026!</p>
+      <p>We noticed that your registration confirmation email may not have reached your inbox. Not to worry, we've got you covered!</p>
+      <p>Your registration was successfully received, and we're sharing your official Registration ID with you here:</p>
       <div style="margin:24px 0;padding:18px;border:2px dashed #00592d;background:#fae01a1a">
-        <div style="font-size:12px;font-weight:700;letter-spacing:.08em">YOUR REGISTRATION CODE</div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.08em">YOUR REGISTRATION ID:</div>
         <div style="font-size:28px;font-weight:800;letter-spacing:.06em;color:#00592d">${safeCode}</div>
       </div>
-      <p>Keep this email handy. See you there!</p>
-      <p style="color:#63655c;font-size:12px">Ogbor Youth Tech Fest 2026</p>
+      <p>Please save this message and keep your Registration ID safe. You will need it for identification and check-in at the event.</p>
+      <div style="margin:24px 0;padding:18px;background:#f5f5ef">
+        <p style="margin:0 0 8px"><strong>Date:</strong> Monday, 30 November 2026</p>
+        <p style="margin:0 0 8px"><strong>Venue:</strong> Word of Faith Group of Schools, 39 Umuola Road, Ogbor Hill, Aba</p>
+        <p style="margin:0"><strong>Time:</strong> 10am</p>
+      </div>
+      <p>Please keep your Registration ID safe. You may need it when checking in at the event. It will also help our team locate your registration if you contact us.</p>
+      <p>Get ready to explore practical digital skills, Artificial Intelligence, career opportunities, entrepreneurship and ways to earn through skills.</p>
+      <p>Questions? Contact us at <a href="tel:08063917367" style="color:#00592d">08063917367</a> or send an email to <a href="mailto:ogboryouthtechfest@gmail.com" style="color:#00592d">ogboryouthtechfest@gmail.com</a>.</p>
+      <p>We look forward to seeing you!</p>
+      <p>The Ogbor Youth Tech Fest Team</p>
+      <p style="margin-top:24px;color:#00592d;font-size:12px;font-weight:700;letter-spacing:.08em">UNLOCKING A NEW DIGITAL ERA.</p>
     </div>
   `;
 
@@ -83,7 +113,7 @@ export async function sendRegistrationEmail({
       body: JSON.stringify({
         from,
         to: [to],
-        subject: "Your Ogbor Youth Tech Fest 2026 registration code",
+        subject: "Your Ogbor Youth Tech Fest 2026 Registration ID",
         text,
         html,
       }),

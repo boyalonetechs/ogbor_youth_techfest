@@ -1,4 +1,3 @@
-import { randomBytes } from "node:crypto";
 import { getPool, isDatabaseConfigured } from "@/lib/db";
 import { validateAttendeeForm } from "@/lib/attendee";
 import { sendRegistrationEmail } from "@/lib/email";
@@ -7,8 +6,8 @@ const CODE_PREFIX = "OYTF-2026-";
 
 function generateVerificationCode(): string {
   // Generate a 4-digit code with leading zeros, e.g., OYTF-2026-0091
-  const codeNum = Math.floor(Math.random() * 9000) + 1000; // 1000-9999
-  return `${CODE_PREFIX}${codeNum}`;
+  const codeNum = Math.floor(Math.random() * 10_000);
+  return `${CODE_PREFIX}${String(codeNum).padStart(4, "0")}`;
 }
 
 function isUniqueViolation(error: unknown): boolean {
