@@ -138,6 +138,16 @@ export async function POST(request: Request) {
           code: verificationCode,
         });
 
+        // Mark the registration as verified as soon as the code is emailed.
+        if (emailResult.sent) {
+          await getPool().query(
+            `UPDATE attendee_registrations
+             SET verified_at = now()
+             WHERE verification_code = $1`,
+            [verificationCode],
+          );
+        }
+
         return Response.json(
           {
             ok: true,

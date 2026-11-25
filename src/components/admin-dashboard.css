@@ -604,6 +604,110 @@
   justify-content: center;
 }
 
+/* Bulk mail composer */
+.oytf-admin-mail-modal {
+  width: min(100%, 640px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.oytf-admin-mail-intro {
+  margin: 8px 0 20px;
+  color: var(--oytf-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.oytf-admin-mail-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.oytf-admin-mail-form label {
+  margin: 14px 0 6px;
+  color: var(--oytf-ink);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.oytf-admin-mail-form label:first-child {
+  margin-top: 0;
+}
+
+.oytf-admin-mail-form select,
+.oytf-admin-mail-form input,
+.oytf-admin-mail-form textarea {
+  width: 100%;
+  border: 1px solid var(--oytf-line);
+  background: #fff;
+  padding: 10px 12px;
+  color: var(--oytf-ink);
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.oytf-admin-mail-form textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.oytf-admin-mail-form select:focus,
+.oytf-admin-mail-form input:focus,
+.oytf-admin-mail-form textarea:focus {
+  border-color: var(--oytf-green);
+}
+
+.oytf-admin-mail-recipients {
+  margin: 6px 0 0;
+  color: var(--oytf-green);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.oytf-admin-mail-result {
+  margin-top: 16px;
+  border: 1px solid var(--oytf-green);
+  background: #eef3ea;
+  padding: 12px 14px;
+  font-size: 11px;
+}
+
+.oytf-admin-mail-result.has-errors {
+  border-color: #c0392b;
+  background: #fdecea;
+}
+
+.oytf-admin-mail-result p {
+  margin: 0;
+}
+
+.oytf-admin-mail-result ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.oytf-admin-mail-result li {
+  margin-bottom: 4px;
+  overflow-wrap: anywhere;
+}
+
+.oytf-admin-mail-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.oytf-admin-mail-actions .oytf-button {
+  width: auto;
+  flex: 1;
+  margin-top: 0;
+}
+
 /* Compact sizing for laptop-width screens only; 2xl keeps the default scale. */
 @media (min-width: 1024px) and (max-width: 1535px) {
   .oytf-admin-topbar {
