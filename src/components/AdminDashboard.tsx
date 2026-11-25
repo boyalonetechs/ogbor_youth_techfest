@@ -69,8 +69,6 @@ function csvCell(value: Registration[keyof Registration]): string {
   return `"${text}"`;
 }
 
-type RecipientFilter = "all" | "filtered" | "verified" | "unverified";
-
 export default function AdminDashboard({
   initialRegistrations,
   configured,
@@ -89,14 +87,6 @@ export default function AdminDashboard({
   const [lookupResult, setLookupResult] = useState<Registration | null>(null);
   const [lookupError, setLookupError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [mailModalOpen, setMailModalOpen] = useState(false);
-  const [mailSubject, setMailSubject] = useState("");
-  const [mailText, setMailText] = useState("");
-  const [mailHtml, setMailHtml] = useState("");
-  const [mailRecipientFilter, setMailRecipientFilter] = useState<RecipientFilter>("filtered");
-  const [mailSending, setMailSending] = useState(false);
-  const [mailResult, setMailResult] = useState<{ sent: number; failed: number; errors: string[] } | null>(null);
-  const [mailError, setMailError] = useState("");
 
   const phase = !configured ? "error" : !authenticated ? "locked" : "ready";
 
@@ -127,74 +117,6 @@ export default function AdminDashboard({
   async function handleLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
     router.refresh();
-  }
-
-  async function handleSendBulkEmail(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setMailError("");
-    setMailResult(null);
-
-    const emails = recipientEmails;
-    if (emails.length === 0) {
-      setMailError("No valid email recipients found for the selected filter.");
-      return;
-    }
-
-    if (!mailSubject.trim() || !mailText.trim() || !mailHtml.trim()) {
-      setMailError("Subject, text content, and HTML content are required.");
-      return;
-    }
-
-    setMailSending(true);
-    try {
-      const response = await fetch("/api/admin/send-bulk-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: emails,
-          subject: mailSubject.trim(),
-          text: mailText.trim(),
-          html: mailHtml.trim(),
-        }),
-      });
-
-      if (!response.ok) {
-        const data = (await response.json()) as { error?: string };
-        setMailError(data.error ?? "Failed to send emails.");
-        return;
-      }
-
-      const result = (await response.json()) as {
-        sent: number;
-        failed: number;
-        errors: string[];
-      };
-      setMailResult(result);
-      if (result.failed === 0) {
-        setMailSubject("");
-        setMailText("");
-        setMailHtml("");
-      }
-    } catch {
-      setMailError("Could not reach the server. Try again.");
-    } finally {
-      setMailSending(false);
-    }
-  }
-
-  function openMailModal() {
-    setMailModalOpen(true);
-    setMailError("");
-    setMailResult(null);
-  }
-
-  function closeMailModal() {
-    setMailModalOpen(false);
-    setMailSubject("");
-    setMailText("");
-    setMailHtml("");
-    setMailError("");
-    setMailResult(null);
   }
 
   function handleLookup(event: FormEvent<HTMLFormElement>) {
@@ -265,18 +187,6 @@ export default function AdminDashboard({
   }, [filtered, sortBy]);
 
   const sheetRegistrations = sorted;
-
-  const recipientRows =
-    mailRecipientFilter === "all"
-      ? registrations
-      : mailRecipientFilter === "filtered"
-        ? filtered
-        : registrations.filter((r) =>
-            mailRecipientFilter === "verified" ? r.verified_at : !r.verified_at,
-          );
-  const recipientEmails = recipientRows
-    .map((r) => r.email)
-    .filter((email): email is string => Boolean(email && email.includes("@")));
 
   function downloadCsv() {
     const header = COLUMNS.map((column) => csvCell(column.label)).join(",");
@@ -357,9 +267,9 @@ export default function AdminDashboard({
             <button type="button" className="oytf-button oytf-button--outline" onClick={downloadCsv}>
               DOWNLOAD CSV <span aria-hidden="true">↓</span>
             </button>
-            <button type="button" className="oytf-button oytf-button--outline" onClick={openMailModal}>
+            <a href="/admin/compose" className="oytf-button oytf-button--outline">
               COMPOSE EMAIL <span aria-hidden="true">✉</span>
-            </button>
+            </a>
             <button type="button" className="oytf-admin-signout" onClick={() => void handleLogout()}>
               Sign out
             </button>
@@ -525,128 +435,6 @@ export default function AdminDashboard({
           </div>
         )}
 
-        {mailModalOpen && (
-          <div
-            className="oytf-admin-modal-backdrop"
-            role="presentation"
-            onClick={closeMailModal}
-          >
-            <div
-              className="oytf-admin-modal oytf-admin-mail-modal"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="mail-title"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <button
-                type="button"
-                className="oytf-admin-modal-close"
-                aria-label="Close mail composer"
-                onClick={closeMailModal}
-              >
-                ×
-              </button>
-              <span className="oytf-admin-eyebrow">BULK MAIL COMPOSER</span>
-              <h2 id="mail-title">Send an email to attendees</h2>
-              <p className="oytf-admin-mail-intro">
-                Compose a message and send it to a group of registered attendees.
-              </p>
-
-              <form className="oytf-admin-mail-form" onSubmit={handleSendBulkEmail}>
-                <label htmlFor="mail-recipients">Send to</label>
-                <select
-                  id="mail-recipients"
-                  value={mailRecipientFilter}
-                  onChange={(event) => setMailRecipientFilter(event.target.value as RecipientFilter)}
-                >
-                  <option value="all">All registrations ({registrations.length})</option>
-                  <option value="filtered">Filtered results ({filtered.length})</option>
-                  <option value="verified">Verified attendees ({registrations.filter((r) => r.verified_at).length})</option>
-                  <option value="unverified">Unverified attendees ({registrations.filter((r) => !r.verified_at).length})</option>
-                </select>
-                <p className="oytf-admin-mail-recipients">
-                  Recipients: {recipientEmails.length} valid email address
-                  {recipientEmails.length === 1 ? "" : "es"}
-                </p>
-
-                <label htmlFor="mail-subject">Subject</label>
-                <input
-                  id="mail-subject"
-                  type="text"
-                  value={mailSubject}
-                  placeholder="Email subject"
-                  onChange={(event) => setMailSubject(event.target.value)}
-                  required
-                />
-
-                <label htmlFor="mail-text">Plain text message</label>
-                <textarea
-                  id="mail-text"
-                  value={mailText}
-                  placeholder="Write your message in plain text…"
-                  rows={5}
-                  onChange={(event) => setMailText(event.target.value)}
-                  required
-                />
-
-                <label htmlFor="mail-html">HTML message</label>
-                <textarea
-                  id="mail-html"
-                  value={mailHtml}
-                  placeholder="<p>Write your message in HTML…</p>"
-                  rows={5}
-                  onChange={(event) => setMailHtml(event.target.value)}
-                  required
-                />
-
-                {mailError && (
-                  <p className="oytf-admin-error" role="alert">{mailError}</p>
-                )}
-                {mailResult && (
-                  <div
-                    className={`oytf-admin-mail-result${mailResult.failed > 0 ? " has-errors" : ""}`}
-                    role="status"
-                  >
-                    <p>
-                      Sent: <strong>{mailResult.sent}</strong> · Failed:{" "}
-                      <strong>{mailResult.failed}</strong>
-                    </p>
-                    {mailResult.errors.length > 0 && (
-                      <ul>
-                        {mailResult.errors.slice(0, 10).map((error, index) => (
-                          <li key={index}>{error}</li>
-                        ))}
-                        {mailResult.errors.length > 10 && (
-                          <li>…and {mailResult.errors.length - 10} more</li>
-                        )}
-                      </ul>
-                    )}
-                  </div>
-                )}
-
-                <div className="oytf-admin-mail-actions">
-                  <button
-                    type="submit"
-                    className="oytf-button"
-                    disabled={mailSending}
-                  >
-                    {mailSending
-                      ? "SENDING…"
-                      : `SEND TO ${recipientEmails.length} RECIPIENT${recipientEmails.length === 1 ? "" : "S"}`}{" "}
-                    <span aria-hidden="true">→</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="oytf-button oytf-button--outline"
-                    onClick={closeMailModal}
-                  >
-                    CANCEL
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

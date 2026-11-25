@@ -604,7 +604,74 @@
   justify-content: center;
 }
 
-/* Bulk mail composer */
+/* Bulk mail composer page */
+.oytf-compose-panel {
+  margin-top: 26px;
+  border: 1px solid var(--oytf-ink);
+  background: #fff;
+  box-shadow: 8px 8px 0 var(--oytf-green);
+  padding: 28px;
+}
+
+.oytf-compose-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.oytf-compose-form label {
+  margin: 16px 0 6px;
+  color: var(--oytf-ink);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.oytf-compose-form label:first-child {
+  margin-top: 0;
+}
+
+.oytf-compose-form select,
+.oytf-compose-form input,
+.oytf-compose-form textarea {
+  width: 100%;
+  border: 1px solid var(--oytf-line);
+  background: #fff;
+  padding: 11px 12px;
+  color: var(--oytf-ink);
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.oytf-compose-form textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.oytf-compose-form select:focus,
+.oytf-compose-form input:focus,
+.oytf-compose-form textarea:focus {
+  border-color: var(--oytf-green);
+}
+
+.oytf-compose-recipient-count {
+  margin: 6px 0 0;
+  color: var(--oytf-green);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.oytf-compose-actions {
+  margin-top: 24px;
+}
+
+.oytf-compose-actions .oytf-button {
+  min-width: 240px;
+  justify-content: center;
+}
+
+/* Bulk mail composer modal */
 .oytf-admin-mail-modal {
   width: min(100%, 640px);
   max-height: calc(100vh - 40px);
