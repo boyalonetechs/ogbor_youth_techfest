@@ -34,5 +34,9 @@ CREATE TABLE IF NOT EXISTS attendee_registrations (
 CREATE INDEX IF NOT EXISTS attendee_registrations_email_idx
   ON attendee_registrations (email);
 
+-- One registration per email address, case-insensitive.
+CREATE UNIQUE INDEX IF NOT EXISTS attendee_registrations_email_unique
+  ON attendee_registrations (lower(email));
+
 CREATE INDEX IF NOT EXISTS attendee_registrations_created_at_idx
   ON attendee_registrations (created_at DESC);

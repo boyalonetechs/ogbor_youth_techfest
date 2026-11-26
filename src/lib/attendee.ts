@@ -235,7 +235,7 @@ export function validateAttendeeForm(input: unknown): ValidationResult {
 
   const data: AttendeeFormValues = {
     fullName: readString(source, "fullName", 200),
-    email: readString(source, "email", 320),
+    email: readString(source, "email", 320).toLowerCase(),
     phone: readString(source, "phone", 40),
     ageRange: readString(source, "ageRange"),
     gender: readString(source, "gender"),

@@ -18,6 +18,26 @@ function isUniqueViolation(error: unknown): boolean {
   );
 }
 
+function isEmailUniqueViolation(error: unknown): boolean {
+  if (!isUniqueViolation(error)) return false;
+  const constraint = (error as { constraint?: string }).constraint ?? "";
+  return constraint === "attendee_registrations_email_unique";
+}
+
+function duplicateEmailResponse() {
+  return Response.json(
+    {
+      ok: false,
+      error: "This email address is already registered.",
+      errors: {
+        email:
+          "This email is already registered. Use a different address or contact us if you already registered.",
+      },
+    },
+    { status: 409 },
+  );
+}
+
 export async function POST(request: Request) {
   let payload: unknown;
   try {
@@ -65,6 +85,20 @@ export async function POST(request: Request) {
     reminders,
     additionalInfo,
   } = result.data;
+
+  try {
+    const existing = await getPool().query(
+      `SELECT 1 FROM attendee_registrations WHERE lower(email) = lower($1) LIMIT 1`,
+      [email],
+    );
+    if (existing.rowCount) return duplicateEmailResponse();
+  } catch (error) {
+    console.error("Failed to check for duplicate email:", error);
+    return Response.json(
+      { error: "We could not check your registration. Please try again." },
+      { status: 500 },
+    );
+  }
 
   const columns = [
     "verification_code",
@@ -158,6 +192,10 @@ export async function POST(request: Request) {
           { status: 201 },
         );
       } catch (error) {
+        // A race between two simultaneous registrations with the same email
+        // still reaches the DB unique index even after the pre-check above.
+        if (isEmailUniqueViolation(error)) return duplicateEmailResponse();
+        // A duplicate verification code is retried with a new code.
         if (isUniqueViolation(error)) continue;
         throw error;
       }
