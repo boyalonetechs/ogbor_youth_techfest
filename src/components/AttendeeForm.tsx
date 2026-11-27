@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   ATTENDEE_OPTIONS,
   emptyAttendeeForm,
@@ -12,6 +12,9 @@ import {
 
 const WHATSAPP_URL =
   "https://chat.whatsapp.com/E8rZzCsqfZNIXzy4jsXJvH?s=cl&p=a&iam=2";
+
+// Give attendees a moment to see/copy their code before opening WhatsApp.
+const WHATSAPP_REDIRECT_SECONDS = 8;
 
 const FIELD_CLASS =
   "w-full rounded-none border border-brand-ink/25 bg-brand-paper px-4 py-3.5 font-rounded text-sm leading-relaxed text-brand-ink outline-none placeholder:text-brand-ink/40 transition-all focus:border-brand-forest focus:ring-4 focus:ring-brand-forest/15";
@@ -431,6 +434,27 @@ export default function AttendeeForm() {
   const [copied, setCopied] = useState(false);
   const [emailDelivered, setEmailDelivered] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [redirectSeconds, setRedirectSeconds] = useState(
+    WHATSAPP_REDIRECT_SECONDS,
+  );
+  const [redirectCancelled, setRedirectCancelled] = useState(false);
+
+  useEffect(() => {
+    if (status !== "success" || redirectCancelled || redirectSeconds <= 0) {
+      return;
+    }
+
+    if (redirectSeconds === 1) {
+      window.location.assign(WHATSAPP_URL);
+      return;
+    }
+
+    const timer = window.setTimeout(
+      () => setRedirectSeconds((seconds) => seconds - 1),
+      1000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [status, redirectCancelled, redirectSeconds]);
 
   const setField = (name: FieldName, value: string | string[]) => {
     setValues((previous) => ({ ...previous, [name]: value }));
@@ -529,6 +553,8 @@ export default function AttendeeForm() {
       setVerificationCode(result.verificationCode ?? "");
       setEmailDelivered(Boolean(result.emailSent));
       setCopied(false);
+      setRedirectSeconds(WHATSAPP_REDIRECT_SECONDS);
+      setRedirectCancelled(false);
       setShowSuccessModal(true);
       setStatus("success");
     } catch {
@@ -547,6 +573,35 @@ export default function AttendeeForm() {
     } catch {
       setCopied(false);
     }
+  };
+
+  const joinWhatsApp = () => {
+    window.location.assign(WHATSAPP_URL);
+  };
+
+  const redirectNotice = () => {
+    if (redirectCancelled) return null;
+
+    return (
+      <div
+        className="mt-5 flex flex-col gap-3 border border-brand-forest/25 bg-brand-sun/10 p-3 sm:flex-row sm:items-center sm:justify-between"
+        role="status"
+      >
+        <p className="font-rounded text-xs leading-relaxed text-brand-muted">
+          Redirecting to our WhatsApp community in{" "}
+          <strong className="text-brand-forest">{redirectSeconds}</strong>{" "}
+          {redirectSeconds === 1 ? "second" : "seconds"}. Your code stays
+          available here.
+        </p>
+        <button
+          type="button"
+          className="border border-brand-ink/25 bg-brand-paper px-3 py-1.5 font-rounded text-[11px] font-bold text-brand-ink transition-colors hover:border-brand-forest hover:text-brand-forest"
+          onClick={() => setRedirectCancelled(true)}
+        >
+          STAY HERE
+        </button>
+      </div>
+    );
   };
 
   if (status === "success") {
@@ -608,15 +663,17 @@ export default function AttendeeForm() {
               Present this code at the festival entrance for fast check-in.
             </p>
 
+            {redirectNotice()}
+
             <div className="mt-6 flex flex-col gap-3.5 sm:flex-row">
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
                 className={PRIMARY_BUTTON}
+                onClick={joinWhatsApp}
               >
-                Join WhatsApp Community <span aria-hidden="true">↗</span>
-              </a>
+                Join WhatsApp Community Now{" "}
+                <span aria-hidden="true">↗</span>
+              </button>
               <Link href="/" className={OUTLINE_BUTTON}>
                 Return Home
               </Link>
@@ -671,15 +728,16 @@ export default function AttendeeForm() {
           </div>
         </div>
 
+        {redirectNotice()}
+
         <div className="mt-8 flex flex-col gap-3.5 sm:flex-row">
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
             className={PRIMARY_BUTTON}
+            onClick={joinWhatsApp}
           >
-            Join WhatsApp Community <span aria-hidden="true">↗</span>
-          </a>
+            Join WhatsApp Community Now <span aria-hidden="true">↗</span>
+          </button>
           <Link href="/" className={OUTLINE_BUTTON}>
             Return Home
           </Link>

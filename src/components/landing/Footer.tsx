@@ -1,9 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-function Arrow() {
-  return <span aria-hidden="true">↗</span>;
-}
 
 export default function Footer() {
   return (
@@ -30,10 +27,10 @@ export default function Footer() {
         <div className="oytf-footer-contact">
           <span className="oytf-footer-label">LET’S TALK</span>
           <a href="mailto:ogboryouthtechfest@gmail.com">
-            ogboryouthtechfest@gmail.com <Arrow />
+            ogboryouthtechfest@gmail.com 
           </a>
           <a href="tel:+2348063917367">
-            08063917367 <Arrow />
+            08063917367 
           </a>
           <small>
             Have questions or want to partner with us?
@@ -44,16 +41,16 @@ export default function Footer() {
 
         <div className="oytf-footer-links">
           <span className="oytf-footer-label">FOLLOW THE JOURNEY</span>
-          <a href="https://www.instagram.com/dphubandtech?rpxt=NTBnbmowY3Frdmdp&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram <Arrow /></a>
-          <a href="https://www.facebook.com/share/1BpzL4bmZ4/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook <Arrow /></a>
-          <a href="https://www.tiktok.com/@dphubandtech" target="_blank" rel="noopener noreferrer">TikTok <Arrow /></a>
+          <a href="https://www.instagram.com/dphubandtech?rpxt=NTBnbmowY3Frdmdp&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram </a>
+          <a href="https://www.facebook.com/share/1BpzL4bmZ4/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">Facebook </a>
+          <a href="https://www.tiktok.com/@dphubandtech" target="_blank" rel="noopener noreferrer">TikTok </a>
         </div>
       </div>
 
       <div className="oytf-footer-bottom">
         <span>© 2026 OGBOR YOUTH TECH FEST</span>
         <span>ORGANISED BY DP HUB &amp; TECH BY LEADPATH</span>
-        <a href="#home">BACK TO TOP ↑</a>
+        <a href="#home">BACK TO TOP </a>
       </div>
     </footer>
   );

@@ -662,6 +662,99 @@
   font-weight: 800;
 }
 
+.oytf-compose-template {
+  align-self: flex-start;
+  margin-top: 14px;
+}
+
+.oytf-compose-form input[type="file"] {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.oytf-compose-form input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: 1px solid var(--oytf-ink);
+  background: var(--oytf-ink);
+  padding: 7px 12px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oytf-compose-form input[type="file"]:disabled::file-selector-button {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.oytf-compose-hint {
+  margin: 6px 0 0;
+  color: var(--oytf-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.oytf-compose-hint code {
+  background: #f5f5ef;
+  padding: 1px 4px;
+  font-size: 10px;
+}
+
+.oytf-compose-attachment {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  border: 1px dashed var(--oytf-line);
+  padding: 10px;
+}
+
+.oytf-compose-attachment img {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--oytf-line);
+  object-fit: cover;
+}
+
+.oytf-compose-attachment-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.oytf-compose-attachment-info strong {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oytf-compose-attachment-info span {
+  color: var(--oytf-muted);
+  font-size: 10px;
+}
+
+.oytf-compose-remove {
+  border: 1px solid var(--oytf-ink);
+  background: transparent;
+  padding: 6px 10px;
+  color: var(--oytf-ink);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oytf-compose-remove:hover {
+  background: var(--oytf-ink);
+  color: #fff;
+}
+
 .oytf-compose-actions {
   margin-top: 24px;
 }

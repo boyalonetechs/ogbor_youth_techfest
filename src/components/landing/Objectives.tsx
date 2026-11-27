@@ -37,7 +37,7 @@ export default function Objectives() {
                   {item.icon}
                 </span>
               </div>
-              <h3 className="mb-3 mt-8 font-hero text-[clamp(22px,2.5vw,26px)] font-black uppercase leading-[1] tracking-[-0.05em] break-words max-w-full">
+              <h3 className="mb-3 mt-10 font-hero text-[clamp(22px,2.5vw,26px)] font-black uppercase leading-[1] tracking-[-0.05em] break-words max-w-full">
                 {item.title}
               </h3>
               <p className="text-xs leading-[1.7] text-brand-ink/65 break-words overflow-hidden max-w-full">
