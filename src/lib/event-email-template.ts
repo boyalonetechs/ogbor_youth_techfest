@@ -1,13 +1,4 @@
-/**
- * Branded HTML email for Ogbor Youth Tech Fest 2026.
- *
- * Pure string builder (no server-only imports) so it can be used by the
- * registration email and by the admin bulk composer. `{{name}}` is left in
- * place by default and replaced per recipient when bulk emails are sent.
- *
- * Visual language follows the site: ink black, sun yellow and forest green,
- * square edges, hard borders, and the original 🎉 / 📅 / 📸 emoji headings.
- */
+
 
 export const WHATSAPP_COMMUNITY_URL =
   "https://chat.whatsapp.com/E8rZzCsqfZNIXzy4jsXJvH?s=cl&p=a&iam=2";
@@ -40,9 +31,7 @@ function escapeHtml(value: string): string {
 }
 
 export type EventEmailOptions = {
-  /** Defaults to the `{{name}}` placeholder used by the bulk composer. */
   name?: string;
-  /** When provided, a registration-code panel is added to the message. */
   code?: string;
 };
 
@@ -113,9 +102,9 @@ export function buildEventEmailHtml({
                 Thank you for registering for <strong style="color:${INK};">Ogbor Youth Tech Fest 2026</strong>. We truly appreciate your interest in being part of this exciting experience.
               </p>
 
-${codePanel}
+              ${codePanel}
               <p style="margin:0 0 28px;font-family:${BODY_FONT};font-size:15px;line-height:1.75;color:${MUTED};">
-                The big day is almost here, and we can&apos;t wait to welcome you. Get ready for technology, innovation, inspiring conversations, networking and new opportunities.
+                The big day is almost here, and we can&apos;t wait to welcome you. Get ready for technology, innovation, inspiring         conversations, networking and new opportunities.
               </p>
 
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${MIST};border:2px solid ${INK};box-shadow:4px 4px 0 ${INK};">

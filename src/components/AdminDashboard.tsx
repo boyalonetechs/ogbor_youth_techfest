@@ -95,6 +95,7 @@ export default function AdminDashboard({
   const [lookupResult, setLookupResult] = useState<Registration | null>(null);
   const [lookupError, setLookupError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [optionsOpen, setOptionsOpen] = useState(false);
   const [confirmSendCodes, setConfirmSendCodes] = useState(false);
   const [sendingCodes, setSendingCodes] = useState(false);
   const [sendCodesError, setSendCodesError] = useState("");
@@ -316,12 +317,62 @@ export default function AdminDashboard({
             <button type="button" className="oytf-button oytf-button--outline" onClick={downloadCsv}>
               DOWNLOAD CSV <span aria-hidden="true">↓</span>
             </button>
+            <button
+              type="button"
+              className="oytf-button oytf-button--outline"
+              aria-expanded={optionsOpen}
+              aria-controls="admin-options-menu"
+              onClick={() => setOptionsOpen((open) => !open)}
+            >
+              {optionsOpen ? "HIDE OPTIONS" : "OPTIONS"}{" "}
+              <span aria-hidden="true">{optionsOpen ? "×" : "⚙"}</span>
+            </button>
             <a href="/admin/compose" className="oytf-button oytf-button--outline">
               COMPOSE EMAIL <span aria-hidden="true">✉</span>
             </a>
             <button type="button" className="oytf-admin-signout" onClick={() => void handleLogout()}>
               Sign out
             </button>
+
+            {optionsOpen && (
+              <div id="admin-options-menu" className="oytf-admin-options">
+                <span className="oytf-admin-eyebrow">EMAIL OPTIONS</span>
+                <p>
+                  Send every attendee the code saved on their own registration
+                  row. Each code goes only to its matching email address.
+                </p>
+                <button
+                  type="button"
+                  className="oytf-button"
+                  onClick={() => setConfirmSendCodes(true)}
+                  disabled={sendingCodes || registrations.length === 0}
+                >
+                  {sendingCodes
+                    ? "SENDING CODES…"
+                    : `SEND ${registrations.length} REGISTRATION CODE${registrations.length === 1 ? "" : "S"}`}{" "}
+                  <span aria-hidden="true">✉</span>
+                </button>
+                {sendCodesError && (
+                  <p className="oytf-admin-error" role="alert">{sendCodesError}</p>
+                )}
+                {sendCodesSummary && (
+                  <p
+                    className={
+                      sendCodesSummary.failed + sendCodesSummary.skipped > 0
+                        ? "oytf-admin-error"
+                        : "oytf-admin-success"
+                    }
+                    role="status"
+                  >
+                    Sent {sendCodesSummary.sent} of {sendCodesSummary.total} codes.
+                    {sendCodesSummary.failed > 0 && ` ${sendCodesSummary.failed} failed.`}
+                    {sendCodesSummary.skipped > 0 && ` ${sendCodesSummary.skipped} skipped.`}
+                    {sendCodesSummary.errors.length > 0 &&
+                      ` ${sendCodesSummary.errors.slice(0, 3).join(" | ")}`}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </header>
 
@@ -330,47 +381,6 @@ export default function AdminDashboard({
           <div><strong>{stats.today}</strong><span>Registered today</span></div>
           <div><strong>{stats.verified}</strong><span>Verified on site</span></div>
         </div>
-
-        <section className="oytf-admin-blast" aria-labelledby="send-codes-title">
-          <div>
-            <h2 id="send-codes-title">EMAIL REGISTRATION CODES</h2>
-            <p>
-              Email every registered attendee their registration code. Each code
-              is sent only to the email saved on the same registration row. This
-              will send a fresh message even to attendees who already received one.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="oytf-button"
-            onClick={() => setConfirmSendCodes(true)}
-            disabled={sendingCodes || registrations.length === 0}
-          >
-            {sendingCodes
-              ? "SENDING CODES…"
-              : `SEND ${registrations.length} CODE${registrations.length === 1 ? "" : "S"}`}{" "}
-            <span aria-hidden="true">✉</span>
-          </button>
-          {sendCodesError && (
-            <p className="oytf-admin-error" role="alert">{sendCodesError}</p>
-          )}
-          {sendCodesSummary && (
-            <p
-              className={
-                sendCodesSummary.failed + sendCodesSummary.skipped > 0
-                  ? "oytf-admin-error"
-                  : "oytf-admin-success"
-              }
-              role="status"
-            >
-              Sent {sendCodesSummary.sent} of {sendCodesSummary.total} registration codes.
-              {sendCodesSummary.failed > 0 && ` ${sendCodesSummary.failed} failed.`}
-              {sendCodesSummary.skipped > 0 && ` ${sendCodesSummary.skipped} skipped.`}
-              {sendCodesSummary.errors.length > 0 &&
-                ` ${sendCodesSummary.errors.slice(0, 3).join(" | ")}`}
-            </p>
-          )}
-        </section>
 
         {searchOpen && (
           <section id="admin-search-panel" className="oytf-admin-search-panel">

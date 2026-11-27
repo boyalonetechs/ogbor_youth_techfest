@@ -105,7 +105,7 @@ export default function Hero() {
           </h1>
 
           <p className="mt-7 max-w-2xl font-rounded text-base leading-relaxed text-[#050B06]/75 md:text-lg">
-            Join the biggest youth technology festival in Aba — a day of digital
+            Join the biggest youth technology festival in Aba a day of digital
             skills, innovation and new connections at Ogbor Youth Tech Fest
             2026.
           </p>
