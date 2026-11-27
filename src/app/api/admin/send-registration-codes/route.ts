@@ -6,7 +6,7 @@ import {
   isAdminConfigured,
 } from "@/lib/admin-auth";
 import { getPool } from "@/lib/db";
-import { isEmailConfigured, sendRegistrationEmail } from "@/lib/email";
+import { isEmailConfigured, sendRegistrationEmailsBatch } from "@/lib/email";
 
 type CodeRow = {
   verification_code: string;
@@ -21,14 +21,6 @@ type SendSummary = {
   skipped: number;
   errors: string[];
 };
-
-// Keep the burst small enough for Resend's rate limits, matching the bulk composer.
-const BATCH_SIZE = 10;
-const BATCH_DELAY_MS = 500;
-
-function delay(milliseconds: number) {
-  return new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
-}
 
 export async function POST(request: NextRequest) {
   if (!isAdminConfigured()) {
@@ -67,49 +59,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const summary: SendSummary = {
-    total: rows.length,
-    sent: 0,
-    failed: 0,
-    skipped: 0,
-    errors: [],
-  };
+  const emails = rows.map((row) => ({
+    // The code, name and address all come from the same database row, so an
+    // attendee can only ever receive their own registration code.
+    to: row.email.trim().toLowerCase(),
+    name: row.full_name?.trim() || "there",
+    code: row.verification_code.trim(),
+  }));
 
-  for (let index = 0; index < rows.length; index += BATCH_SIZE) {
-    const batch = rows.slice(index, index + BATCH_SIZE);
+  const result = await sendRegistrationEmailsBatch(emails);
 
-    await Promise.all(
-      batch.map(async (row) => {
-        // The code, name and address all come from the same database row, so
-        // an attendee can only ever receive their own registration code.
-        const to = row.email.trim().toLowerCase();
-        const code = row.verification_code.trim();
-        const name = row.full_name?.trim() || "there";
-
-        try {
-          const result = await sendRegistrationEmail({ to, name, code });
-          if (result.skipped) {
-            summary.skipped++;
-            summary.errors.push(`${to}: email service not configured`);
-          } else if (result.sent) {
-            summary.sent++;
-          } else {
-            summary.failed++;
-            summary.errors.push(`${to}: email provider rejected the message`);
-          }
-        } catch (error) {
-          summary.failed++;
-          summary.errors.push(
-            `${to}: ${error instanceof Error ? error.message : "Unknown error"}`,
-          );
-        }
-      }),
-    );
-
-    if (index + BATCH_SIZE < rows.length) {
-      await delay(BATCH_DELAY_MS);
-    }
-  }
-
+  const summary: SendSummary = { total: rows.length, ...result };
   return NextResponse.json(summary);
 }

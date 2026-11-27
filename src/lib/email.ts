@@ -3,7 +3,7 @@ import {
   WHATSAPP_COMMUNITY_URL,
 } from "@/lib/event-email-template";
 
-type RegistrationEmail = {
+export type RegistrationEmail = {
   to: string;
   name: string;
   code: string;
@@ -12,9 +12,13 @@ type RegistrationEmail = {
 export type EmailResult = {
   sent: boolean;
   skipped: boolean;
+  /** Provider error detail, when the send was rejected. */
+  error?: string;
 };
 
 const RESEND_API_URL = "https://api.resend.com/emails";
+const RESEND_BATCH_API_URL = "https://api.resend.com/emails/batch";
+const BATCH_LIMIT = 100;
 
 function escapeHtml(value: string): string {
   return value.replace(
@@ -34,18 +38,10 @@ export function isEmailConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
 }
 
-export async function sendRegistrationEmail({
-  to,
-  name,
-  code,
-}: RegistrationEmail): Promise<EmailResult> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-
-  if (!apiKey || !from) {
-    return { sent: false, skipped: true };
-  }
-
+function buildRegistrationEmailPayload(
+  { to, name, code }: RegistrationEmail,
+  from: string,
+) {
   const text = [
     `Hello ${name}!`,
     "",
@@ -78,7 +74,41 @@ export async function sendRegistrationEmail({
     "The Ogbor Youth Tech Fest Team",
   ].join("\n");
 
-  const html = buildEventEmailHtml({ name, code });
+  return {
+    from,
+    to: [to],
+    subject: "Your Ogbor Youth Tech Fest 2026 Registration ID",
+    text,
+    html: buildEventEmailHtml({ name, code }),
+  };
+}
+
+async function readResendError(response: Response): Promise<string> {
+  try {
+    const data = (await response.json()) as {
+      name?: string;
+      message?: string;
+    };
+    if (data.message) {
+      return data.name ? `${data.name}: ${data.message}` : data.message;
+    }
+  } catch {
+    // Fall back to the raw status when the provider did not return JSON.
+  }
+  return `Resend returned ${response.status}`;
+}
+
+export async function sendRegistrationEmail({
+  to,
+  name,
+  code,
+}: RegistrationEmail): Promise<EmailResult> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+
+  if (!apiKey || !from) {
+    return { sent: false, skipped: true };
+  }
 
   try {
     const response = await fetch(RESEND_API_URL, {
@@ -87,25 +117,105 @@ export async function sendRegistrationEmail({
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject: "Your Ogbor Youth Tech Fest 2026 Registration ID",
-        text,
-        html,
-      }),
+      body: JSON.stringify(
+        buildRegistrationEmailPayload({ to, name, code }, from),
+      ),
     });
 
     if (!response.ok) {
-      console.error("Resend rejected the registration email:", response.status);
-      return { sent: false, skipped: false };
+      const error = await readResendError(response);
+      console.error("Resend rejected the registration email:", error);
+      return { sent: false, skipped: false, error };
     }
 
     return { sent: true, skipped: false };
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Failed to send the registration email:", error);
-    return { sent: false, skipped: false };
+    return { sent: false, skipped: false, error: message };
   }
+}
+
+export type RegistrationBatchResult = {
+  sent: number;
+  failed: number;
+  skipped: number;
+  errors: string[];
+};
+
+/**
+ * Send registration-code emails with Resend's batch endpoint. Up to 100
+ * personalized emails go in one API request, avoiding the 10 requests/second
+ * per-team rate limit that applies when sending each email separately.
+ */
+export async function sendRegistrationEmailsBatch(
+  emails: RegistrationEmail[],
+): Promise<RegistrationBatchResult> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+
+  if (!apiKey || !from) {
+    return {
+      sent: 0,
+      failed: 0,
+      skipped: emails.length,
+      errors: ["Email not configured"],
+    };
+  }
+
+  const result: RegistrationBatchResult = {
+    sent: 0,
+    failed: 0,
+    skipped: 0,
+    errors: [],
+  };
+
+  for (let index = 0; index < emails.length; index += BATCH_LIMIT) {
+    const chunk = emails.slice(index, index + BATCH_LIMIT);
+
+    try {
+      const response = await fetch(RESEND_BATCH_API_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          chunk.map((email) => buildRegistrationEmailPayload(email, from)),
+        ),
+      });
+
+      if (!response.ok) {
+        const error = await readResendError(response);
+        result.failed += chunk.length;
+        result.errors.push(`batch of ${chunk.length} emails: ${error}`);
+        continue;
+      }
+
+      const data = (await response.json().catch(() => ({}))) as {
+        data?: Array<{ id?: string; message?: string }>;
+      };
+      const items = Array.isArray(data.data) ? data.data : [];
+
+      chunk.forEach((email, itemIndex) => {
+        const item = items[itemIndex];
+        if (item?.id) {
+          result.sent++;
+        } else {
+          result.failed++;
+          result.errors.push(
+            `${email.to}: ${item?.message ?? "email provider rejected the message"}`,
+          );
+        }
+      });
+    } catch (error) {
+      result.failed += chunk.length;
+      const message = error instanceof Error ? error.message : "Unknown error";
+      result.errors.push(`batch request failed: ${message}`);
+    }
+  }
+
+  return result;
 }
 
 /** Replace every `{{name}}` with the recipient's name. Escape it for HTML. */
