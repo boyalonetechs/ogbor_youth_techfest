@@ -1,12 +1,20 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Registration } from "@/lib/registrations";
+import type { VolunteerRegistration } from "@/lib/volunteer-registrations";
+import VolunteerSheet, {
+  downloadVolunteerCsv,
+  filterVolunteerRows,
+  type VolunteerSortKey,
+} from "@/components/VolunteerSheet";
 import "./admin-dashboard.css";
 
 type AdminDashboardProps = {
   initialRegistrations: Registration[];
+  initialVolunteers: VolunteerRegistration[];
   configured: boolean;
   authenticated: boolean;
   today: string;
@@ -79,6 +87,7 @@ function csvCell(value: Registration[keyof Registration]): string {
 
 export default function AdminDashboard({
   initialRegistrations,
+  initialVolunteers,
   configured,
   authenticated,
   today,
@@ -87,6 +96,12 @@ export default function AdminDashboard({
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const registrations = initialRegistrations;
+  const volunteers = initialVolunteers;
+  const [activeSheet, setActiveSheet] = useState<"attendee" | "volunteer">(
+    "attendee",
+  );
+  const [volunteerSortBy, setVolunteerSortBy] =
+    useState<VolunteerSortKey>("created_desc");
   const [search, setSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [selectedCode, setSelectedCode] = useState("");
@@ -199,16 +214,40 @@ export default function AdminDashboard({
     );
   }, [registrations, search]);
 
-  const stats = useMemo(
-    () => ({
-      total: registrations.length,
+  const stats = useMemo(() => {
+    const attendeeEmails = new Set(
+      registrations.map((row) => row.email.trim().toLowerCase()).filter(Boolean),
+    );
+    const volunteerEmails = new Set(
+      volunteers.map((row) => row.email.trim().toLowerCase()).filter(Boolean),
+    );
+    const uniqueEmails = new Set([...attendeeEmails, ...volunteerEmails]);
+    const sharedEmails = [...attendeeEmails].filter((email) =>
+      volunteerEmails.has(email),
+    ).length;
+
+    const todayAttendeeEmails = new Set(
+      registrations
+        .filter((row) => today && row.created_at.startsWith(today))
+        .map((row) => row.email.trim().toLowerCase())
+        .filter(Boolean),
+    );
+    const todayVolunteerEmails = new Set(
+      volunteers
+        .filter((row) => today && row.created_at.startsWith(today))
+        .map((row) => row.email.trim().toLowerCase())
+        .filter(Boolean),
+    );
+
+    return {
+      total: uniqueEmails.size,
+      today: new Set([...todayAttendeeEmails, ...todayVolunteerEmails]).size,
       verified: registrations.filter((row) => row.verified_at).length,
-      today: today
-        ? registrations.filter((row) => row.created_at.startsWith(today)).length
-        : 0,
-    }),
-    [registrations, today],
-  );
+      attendees: registrations.length,
+      volunteers: volunteers.length,
+      shared: sharedEmails,
+    };
+  }, [registrations, volunteers, today]);
 
   const sorted = useMemo(() => {
     const rows = [...filtered];
@@ -239,6 +278,11 @@ export default function AdminDashboard({
   const sheetRegistrations = sorted;
 
   function downloadCsv() {
+    if (activeSheet === "volunteer") {
+      downloadVolunteerCsv(volunteers, search, volunteerSortBy);
+      return;
+    }
+
     const header = COLUMNS.map((column) => csvCell(column.label)).join(",");
     const rows = sorted.map((row) =>
       COLUMNS.map((column) => csvCell(row[column.key])).join(","),
@@ -300,8 +344,16 @@ export default function AdminDashboard({
         <header className="oytf-admin-header">
           <div>
             <span className="oytf-admin-eyebrow">OGBOR YOUTH TECH FEST 2026</span>
-            <h1>ATTENDEE REGISTRATIONS</h1>
-            <p>Enter a registration code to look up the attendee instantly.</p>
+            <h1>
+              {activeSheet === "attendee"
+                ? "REGISTRATION DASHBOARD"
+                : "VOLUNTEER APPLICATIONS"}
+            </h1>
+            <p>
+              {activeSheet === "attendee"
+                ? "Enter a registration code to look up the attendee instantly."
+                : "Review the people who applied to help at the event."}
+            </p>
           </div>
           <div className="oytf-admin-header-actions">
             <button
@@ -327,6 +379,9 @@ export default function AdminDashboard({
               {optionsOpen ? "HIDE OPTIONS" : "OPTIONS"}{" "}
               <span aria-hidden="true">{optionsOpen ? "×" : "⚙"}</span>
             </button>
+            <Link href="/volunteer-admin" className="oytf-button oytf-button--outline">
+              MANUAL ENTRY <span aria-hidden="true">＋</span>
+            </Link>
             <a href="/admin/compose" className="oytf-button oytf-button--outline">
               COMPOSE EMAIL <span aria-hidden="true">✉</span>
             </a>
@@ -377,9 +432,45 @@ export default function AdminDashboard({
         </header>
 
         <div className="oytf-admin-stats">
-          <div><strong>{stats.total}</strong><span>Total registered</span></div>
+          <div>
+            <strong>{stats.total}</strong>
+            <span>Total registered people</span>
+            <small>Unique email across both sheets</small>
+          </div>
           <div><strong>{stats.today}</strong><span>Registered today</span></div>
           <div><strong>{stats.verified}</strong><span>Verified on site</span></div>
+        </div>
+
+        <div className="oytf-admin-sheet-picker" role="group" aria-label="Choose a sheet">
+          <button
+            type="button"
+            className={`oytf-admin-sheet-picker__button ${activeSheet === "attendee" ? "is-active" : ""}`}
+            aria-pressed={activeSheet === "attendee"}
+            onClick={() => setActiveSheet("attendee")}
+          >
+            <span className="oytf-admin-sheet-picker__label">ATTENDEE SHEET</span>
+            <strong>{stats.attendees}</strong>
+            <span className="oytf-admin-sheet-picker__note">
+              Registration records · click to open
+            </span>
+          </button>
+          <button
+            type="button"
+            className={`oytf-admin-sheet-picker__button ${activeSheet === "volunteer" ? "is-active" : ""}`}
+            aria-pressed={activeSheet === "volunteer"}
+            onClick={() => setActiveSheet("volunteer")}
+          >
+            <span className="oytf-admin-sheet-picker__label">VOLUNTEER SHEET</span>
+            <strong>{stats.volunteers}</strong>
+            <span className="oytf-admin-sheet-picker__note">
+              Volunteer applications · click to open
+            </span>
+            {stats.shared > 0 && (
+              <em>
+                {stats.shared} also registered to attend — counted once above
+              </em>
+            )}
+          </button>
         </div>
 
         {searchOpen && (
@@ -389,37 +480,46 @@ export default function AdminDashboard({
               id="admin-search"
               type="search"
               value={search}
-              placeholder="Search name, email, phone or code…"
+              placeholder={
+                activeSheet === "attendee"
+                  ? "Search name, email, phone or code…"
+                  : "Search name, email, WhatsApp, team or skill…"
+              }
               onChange={(event) => setSearch(event.target.value)}
             />
             <span>
-              {filtered.length} of {registrations.length} rows
+              {activeSheet === "attendee"
+                ? `${filtered.length} of ${registrations.length} rows`
+                : `${filterVolunteerRows(volunteers, search).length} of ${volunteers.length} rows`}
             </span>
           </section>
         )}
 
-        <section className="oytf-admin-verify">
-          <div>
-            <h2>FIND A REGISTRATION</h2>
-            <p>Type or paste a code to see the matching attendee.</p>
-          </div>
-          <form className="oytf-admin-verify-actions" onSubmit={handleLookup}>
-            <input
-              type="text"
-              value={codeInput}
-              placeholder="OYTF-2026-0091"
-              aria-label="Registration code"
-              onChange={(event) => setCodeInput(event.target.value)}
-            />
-            <button type="submit" className="oytf-button">
-              FIND <span aria-hidden="true">↗</span>
-            </button>
-          </form>
-          {lookupError && (
-            <p className="oytf-admin-error" role="alert">{lookupError}</p>
-          )}
-        </section>
+        {activeSheet === "attendee" && (
+          <section className="oytf-admin-verify">
+            <div>
+              <h2>FIND A REGISTRATION</h2>
+              <p>Type or paste a code to see the matching attendee.</p>
+            </div>
+            <form className="oytf-admin-verify-actions" onSubmit={handleLookup}>
+              <input
+                type="text"
+                value={codeInput}
+                placeholder="OYTF-2026-0091"
+                aria-label="Registration code"
+                onChange={(event) => setCodeInput(event.target.value)}
+              />
+              <button type="submit" className="oytf-button">
+                FIND <span aria-hidden="true">↗</span>
+              </button>
+            </form>
+            {lookupError && (
+              <p className="oytf-admin-error" role="alert">{lookupError}</p>
+            )}
+          </section>
+        )}
 
+        {activeSheet === "attendee" ? (
         <div className="oytf-admin-sheet">
           <div className="oytf-admin-sheet-bar">
             <span>REGISTRATION SHEET</span>
@@ -476,8 +576,16 @@ export default function AdminDashboard({
             )}
           </div>
         </div>
+        ) : (
+          <VolunteerSheet
+            volunteers={volunteers}
+            search={search}
+            sortBy={volunteerSortBy}
+            onSortChange={setVolunteerSortBy}
+          />
+        )}
 
-        {lookupResult && (
+        {activeSheet === "attendee" && lookupResult && (
           <div
             className="oytf-admin-modal-backdrop"
             role="presentation"

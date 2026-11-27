@@ -13,12 +13,34 @@ entrance to look the attendee up from the admin dashboard. Digital skills,
 learning styles, device access, event hopes, and heard-about sources are stored
 as arrays.
 
+## Volunteer application
+
+The six-step volunteer form lives at `/register/volunteer`. It asks for contact
+details, T-shirt size, previous volunteering, preferred team, skills and skill
+level. The browser validates each step and the `/api/volunteer` route handler
+validates the full submission again before storing it in PostgreSQL. The final
+step links to the volunteer WhatsApp group.
+
+## Manual attendee registration
+
+`/volunteer-admin` is now a password-protected manual registration portal. After
+signing in with `VOLUNTEER_ADMIN_PASSWORD`, an organiser can add an attendee
+using only the details needed at the door: name, email, phone, age range,
+location, how they describe themselves, and optional notes. It generates a
+verification code immediately and does not send an email from this portal.
+It uses its own session cookie, so the attendee dashboard password cannot unlock
+it.
+
 ## Admin dashboard
 
-`/admin` has a spreadsheet-style table with category tabs, a sort control, code
-lookup (which opens the matching attendee in a popup), search behind a header
-toggle, and CSV export. It is protected by a password set in `ADMIN_PASSWORD`.
-No attendee list is shown in a permanent sidebar.
+`/admin` is protected by `ADMIN_PASSWORD`. It shows both the attendee
+registrations and the volunteer applications in one dashboard: two boxes below
+the summary open the chosen sheet, each with its own search, sort, detail popup
+and CSV export. Attendee code lookup stays in the attendee sheet.
+
+The headline total counts unique people by email across both sheets. If the same
+email appears in both attendee registrations and volunteer applications, it is
+counted once; the volunteer box shows how many of those overlaps exist.
 
 ### Setup
 
@@ -38,6 +60,7 @@ No attendee list is shown in a permanent sidebar.
    DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DATABASE_NAME
    DATABASE_SSL=false
    ADMIN_PASSWORD=a-long-random-password
+   VOLUNTEER_ADMIN_PASSWORD=a-different-long-random-password
    RESEND_API_KEY=re_your_api_key_here
    EMAIL_FROM=Ogbor Youth Tech Fest <events@example.com>
    ```
@@ -54,6 +77,7 @@ No attendee list is shown in a permanent sidebar.
 
    ```bash
    psql "$DATABASE_URL" -f db/attendee_registrations.sql
+   psql "$DATABASE_URL" -f db/volunteer_registrations.sql
    ```
 
 4. Optional: import the existing `public/attendance.csv` registrations. The CSV
@@ -74,7 +98,10 @@ No attendee list is shown in a permanent sidebar.
    ```
 
 Open `/register/attend` to submit a test registration and confirm the row
-appears at `/admin`.
+appears in the attendee sheet at `/admin`. Open `/register/volunteer` to submit a
+test application and confirm it appears in the volunteer sheet at `/admin`.
+Sign in at `/volunteer-admin` with `VOLUNTEER_ADMIN_PASSWORD` to manually add an
+attendee and confirm the new row appears in the attendee sheet.
 
 Both the registration form and admin dashboard use the project's self-hosted
 Next.js fonts (Nunito for body copy and Space Grotesk for headings).

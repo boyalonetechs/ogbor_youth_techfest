@@ -7,6 +7,7 @@ import AdminDashboard from "@/components/AdminDashboard";
 import { ADMIN_COOKIE, isAdminAuthenticated, isAdminConfigured } from "@/lib/admin-auth";
 import { isDatabaseConfigured } from "@/lib/db";
 import { getAttendeeRegistrations } from "@/lib/registrations";
+import { getVolunteerRegistrations } from "@/lib/volunteer-registrations";
 import "@/components/landing/landing.css";
 
 export const metadata: Metadata = {
@@ -26,6 +27,8 @@ async function AdminContent() {
 
   const registrations =
     configured && authenticated ? await getAttendeeRegistrations() : [];
+  const volunteers =
+    configured && authenticated ? await getVolunteerRegistrations() : [];
 
   const today = new Date().toISOString().slice(0, 10);
 
@@ -33,6 +36,7 @@ async function AdminContent() {
     <AdminDashboard
       key={authenticated ? "admin-in" : "admin-out"}
       initialRegistrations={registrations}
+      initialVolunteers={volunteers}
       configured={configured}
       authenticated={authenticated}
       today={today}
@@ -48,6 +52,7 @@ export default function AdminPage() {
         <nav>
           <Link href="/">Home</Link>
           <Link href="/register">Registration</Link>
+          <Link href="/volunteer-admin">Manual entry</Link>
         </nav>
       </header>
       <Suspense fallback={<div className="oytf-admin-state">Loading registrations…</div>}>

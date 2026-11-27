@@ -3,7 +3,7 @@ import SectionKicker from "./SectionKicker";
 
 const REGISTRATION_LINKS = {
   attend: "/register/attend",
-  volunteer: "https://forms.gle/6sgZ4orcfiC254oFA",
+  volunteer: "/register/volunteer",
   exhibit: "https://forms.gle/F4cdQV1ChMa9Czj68",
 } as const;
 
@@ -94,8 +94,8 @@ export default function GetInvolved() {
           </h2>
           <p className="mb-1 max-w-[360px] text-[13px] leading-[1.7] text-black/65">
             Whether you want to learn, contribute or showcase your work, there
-            is a place for you at Ogbor Youth Tech Fest 2026. Attendee
-            registration is now open on this site.
+            is a place for you at Ogbor Youth Tech Fest 2026. Attendee and
+            volunteer registration are now open on this site.
           </p>
         </div>
 
@@ -187,14 +187,9 @@ export default function GetInvolved() {
             <Link href={REGISTRATION_LINKS.attend} className={OUTLINE_LINK}>
               Attend form <span aria-hidden="true">↗</span>
             </Link>
-            <a
-              href={REGISTRATION_LINKS.volunteer}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={OUTLINE_LINK}
-            >
+            <Link href={REGISTRATION_LINKS.volunteer} className={OUTLINE_LINK}>
               Volunteer form <span aria-hidden="true">↗</span>
-            </a>
+            </Link>
             <a
               href={REGISTRATION_LINKS.exhibit}
               target="_blank"

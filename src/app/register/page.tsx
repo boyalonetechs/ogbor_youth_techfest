@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const REGISTRATION_LINKS = {
   attend: "/register/attend",
-  volunteer: "https://forms.gle/6sgZ4orcfiC254oFA",
+  volunteer: "/register/volunteer",
   exhibit: "https://forms.gle/F4cdQV1ChMa9Czj68",
 } as const;
 
@@ -65,9 +65,9 @@ export default function RegisterPage() {
             <span>YOUR WAY.</span>
           </h1>
           <p>
-            Choose how you want to be part of Ogbor Youth Tech Fest 2026. The
-            attendee registration is completed right here; the other options
-            open a short form.
+            Choose how you want to be part of Ogbor Youth Tech Fest 2026.
+            Attendee and volunteer applications are completed right here; the
+            exhibitor option opens a short form.
           </p>
         </div>
 

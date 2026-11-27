@@ -123,7 +123,7 @@ export function buildEventEmailHtml({
                     </p>
                     <p style="margin:0;font-family:${BODY_FONT};font-size:15px;line-height:1.7;color:${INK};">
                       <span style="display:block;margin-bottom:3px;font-family:${DISPLAY_FONT};font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:${FOREST};">Location</span>
-                      World of Faith Group of Schools, 39 Umuola Road, Ogbor Hill, Aba, Abia State.
+                      Word of Faith Group of Schools, 39 Umuola Road, Ogbor Hill, Aba, Abia State.
                     </p>
                   </td>
                 </tr>
