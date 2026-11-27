@@ -12,6 +12,14 @@ type AdminDashboardProps = {
   today: string;
 };
 
+type SendCodesSummary = {
+  total: number;
+  sent: number;
+  failed: number;
+  skipped: number;
+  errors: string[];
+};
+
 type SortKey =
   | "created_desc"
   | "created_asc"
@@ -87,6 +95,12 @@ export default function AdminDashboard({
   const [lookupResult, setLookupResult] = useState<Registration | null>(null);
   const [lookupError, setLookupError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [confirmSendCodes, setConfirmSendCodes] = useState(false);
+  const [sendingCodes, setSendingCodes] = useState(false);
+  const [sendCodesError, setSendCodesError] = useState("");
+  const [sendCodesSummary, setSendCodesSummary] = useState<SendCodesSummary | null>(
+    null,
+  );
 
   const phase = !configured ? "error" : !authenticated ? "locked" : "ready";
 
@@ -117,6 +131,41 @@ export default function AdminDashboard({
   async function handleLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
     router.refresh();
+  }
+
+  async function handleSendCodes() {
+    setSendingCodes(true);
+    setSendCodesError("");
+    setSendCodesSummary(null);
+
+    try {
+      const response = await fetch("/api/admin/send-registration-codes", {
+        method: "POST",
+      });
+      const data = (await response.json().catch(() => ({}))) as Partial<SendCodesSummary> & {
+        error?: string;
+      };
+
+      if (!response.ok) {
+        setSendCodesError(data.error ?? "Could not send registration codes.");
+        setConfirmSendCodes(false);
+        return;
+      }
+
+      setSendCodesSummary({
+        total: data.total ?? 0,
+        sent: data.sent ?? 0,
+        failed: data.failed ?? 0,
+        skipped: data.skipped ?? 0,
+        errors: Array.isArray(data.errors) ? data.errors : [],
+      });
+      setConfirmSendCodes(false);
+    } catch {
+      setSendCodesError("Could not reach the server. Try again.");
+      setConfirmSendCodes(false);
+    } finally {
+      setSendingCodes(false);
+    }
   }
 
   function handleLookup(event: FormEvent<HTMLFormElement>) {
@@ -282,6 +331,47 @@ export default function AdminDashboard({
           <div><strong>{stats.verified}</strong><span>Verified on site</span></div>
         </div>
 
+        <section className="oytf-admin-blast" aria-labelledby="send-codes-title">
+          <div>
+            <h2 id="send-codes-title">EMAIL REGISTRATION CODES</h2>
+            <p>
+              Email every registered attendee their registration code. Each code
+              is sent only to the email saved on the same registration row. This
+              will send a fresh message even to attendees who already received one.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="oytf-button"
+            onClick={() => setConfirmSendCodes(true)}
+            disabled={sendingCodes || registrations.length === 0}
+          >
+            {sendingCodes
+              ? "SENDING CODES…"
+              : `SEND ${registrations.length} CODE${registrations.length === 1 ? "" : "S"}`}{" "}
+            <span aria-hidden="true">✉</span>
+          </button>
+          {sendCodesError && (
+            <p className="oytf-admin-error" role="alert">{sendCodesError}</p>
+          )}
+          {sendCodesSummary && (
+            <p
+              className={
+                sendCodesSummary.failed + sendCodesSummary.skipped > 0
+                  ? "oytf-admin-error"
+                  : "oytf-admin-success"
+              }
+              role="status"
+            >
+              Sent {sendCodesSummary.sent} of {sendCodesSummary.total} registration codes.
+              {sendCodesSummary.failed > 0 && ` ${sendCodesSummary.failed} failed.`}
+              {sendCodesSummary.skipped > 0 && ` ${sendCodesSummary.skipped} skipped.`}
+              {sendCodesSummary.errors.length > 0 &&
+                ` ${sendCodesSummary.errors.slice(0, 3).join(" | ")}`}
+            </p>
+          )}
+        </section>
+
         {searchOpen && (
           <section id="admin-search-panel" className="oytf-admin-search-panel">
             <label htmlFor="admin-search">Filter the sheet</label>
@@ -431,6 +521,55 @@ export default function AdminDashboard({
               >
                 CLOSE
               </button>
+            </div>
+          </div>
+        )}
+
+        {confirmSendCodes && (
+          <div
+            className="oytf-admin-modal-backdrop"
+            role="presentation"
+            onClick={() => setConfirmSendCodes(false)}
+          >
+            <div
+              className="oytf-admin-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="send-codes-confirm-title"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="oytf-admin-modal-close"
+                aria-label="Cancel sending registration codes"
+                onClick={() => setConfirmSendCodes(false)}
+              >
+                ×
+              </button>
+              <span className="oytf-admin-eyebrow">CONFIRM BULK SEND</span>
+              <h2 id="send-codes-confirm-title">Send registration codes?</h2>
+              <p className="oytf-admin-modal-note">
+                This will email {registrations.length} attendees. Every code is
+                paired with the email saved on the same registration row, so no
+                attendee receives another person&apos;s code.
+              </p>
+              <div className="oytf-admin-confirm-actions">
+                <button
+                  type="button"
+                  className="oytf-button oytf-button--outline"
+                  onClick={() => setConfirmSendCodes(false)}
+                >
+                  CANCEL
+                </button>
+                <button
+                  type="button"
+                  className="oytf-button"
+                  onClick={() => void handleSendCodes()}
+                  disabled={sendingCodes}
+                >
+                  {sendingCodes ? "SENDING…" : "YES, SEND CODES"}
+                </button>
+              </div>
             </div>
           </div>
         )}

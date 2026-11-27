@@ -270,6 +270,82 @@
   text-transform: uppercase;
 }
 
+.oytf-admin-blast {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--oytf-line);
+  background: var(--oytf-lime);
+  box-shadow: 4px 4px 0 var(--oytf-ink);
+  padding: 18px 20px;
+}
+
+.oytf-admin-blast::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--oytf-ink);
+}
+
+.oytf-admin-blast h2 {
+  margin: 0 0 4px;
+  color: var(--oytf-ink);
+  font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
+  font-size: 15px;
+  letter-spacing: -0.04em;
+}
+
+.oytf-admin-blast p {
+  max-width: 70ch;
+  margin: 0;
+  color: #5e6058;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.oytf-admin-blast .oytf-button {
+  border: 1px solid var(--oytf-ink);
+  background: var(--oytf-ink);
+  color: #fff !important;
+}
+
+.oytf-admin-blast .oytf-button:hover:not(:disabled) {
+  border-color: var(--oytf-green);
+  background: var(--oytf-green);
+  color: #fff !important;
+}
+
+.oytf-admin-blast .oytf-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.oytf-admin-blast > .oytf-admin-error,
+.oytf-admin-blast > .oytf-admin-success {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.oytf-admin-confirm-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.oytf-admin-confirm-actions .oytf-button {
+  width: 100%;
+  margin-top: 20px;
+  justify-content: center;
+}
+
 .oytf-admin-verify {
   position: relative;
   display: flex;

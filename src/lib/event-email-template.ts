@@ -87,7 +87,7 @@ export function buildEventEmailHtml({
             <td align="center" style="background:${INK};padding:34px 28px 30px;">
               <img src="${EVENT_LOGO_URL}" alt="Ogbor Youth Tech Fest 2026" width="220" style="display:block;max-width:220px;height:auto;margin:0 auto 20px;" />
               <p style="margin:0 0 12px;font-family:${DISPLAY_FONT};font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:${SUN};">
-                DP Hub &amp; Tech by Leadpath presents
+                Digital Productivity Hub presents
               </p>
               <h1 style="margin:0;font-family:${DISPLAY_FONT};font-size:32px;line-height:1.06;font-weight:800;letter-spacing:-1px;color:${PAPER};text-transform:uppercase;">
                 Ogbor Youth<br />
@@ -156,7 +156,7 @@ ${codePanel}
               <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;background:${INK};border-left:6px solid ${SUN};">
                 <tr>
                   <td style="padding:16px 18px;font-family:${BODY_FONT};font-size:14px;line-height:1.7;color:${PAPER};">
-                    <strong style="color:${SUN};">🚨 Important reminder:</strong> Please come with your registration code. You will need it for check-in at the entrance.
+                    <strong style="color:${SUN};">🚨 Important reminder:</strong> Please come with your registration code. You will need it for check-in at the entrance. Note: kindly check your email for your registration code.
                   </td>
                 </tr>
               </table>
