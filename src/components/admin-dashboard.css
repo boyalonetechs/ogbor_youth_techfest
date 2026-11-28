@@ -490,6 +490,10 @@
   color: var(--oytf-ink);
 }
 
+.oytf-admin-sheet--attendee {
+  margin-top: 38px;
+}
+
 .oytf-admin-sheet-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -1263,10 +1267,24 @@
 }
 
 /* Manual attendee registration portal */
+.oytf-admin-main.oytf-manual-main {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.oytf-manual-main .oytf-admin-header {
+  justify-content: center;
+  text-align: center;
+}
+
+.oytf-manual-main .oytf-admin-header-actions {
+  justify-content: center;
+}
+
 .oytf-manual-form,
 .oytf-manual-result {
   max-width: 880px;
-  margin-top: 26px;
+  margin: 26px auto 0;
   border: 1px solid var(--oytf-line);
   background: #fff;
   box-shadow: 6px 6px 0 var(--oytf-green);

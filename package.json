@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "import:volunteers": "tsx scripts/import-volunteer-csv.ts"
   },
   "dependencies": {
     "lucide-react": "^1.69.0",

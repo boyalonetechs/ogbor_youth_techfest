@@ -3,6 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS volunteer_registrations (
   id BIGSERIAL PRIMARY KEY,
+  verification_code TEXT NOT NULL,
   full_name TEXT NOT NULL,
   email TEXT NOT NULL,
   whatsapp TEXT NOT NULL,
@@ -16,6 +17,9 @@ CREATE TABLE IF NOT EXISTS volunteer_registrations (
   skill_level TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS volunteer_registrations_code_unique
+  ON volunteer_registrations (verification_code);
 
 CREATE INDEX IF NOT EXISTS volunteer_registrations_email_idx
   ON volunteer_registrations (email);

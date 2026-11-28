@@ -1,6 +1,13 @@
 import { getPool, isDatabaseConfigured } from "@/lib/db";
 import { validateVolunteerForm } from "@/lib/volunteer";
 
+const CODE_PREFIX = "OYTFV-2026-";
+
+function generateVerificationCode(): string {
+  const codeNum = Math.floor(Math.random() * 10_000);
+  return `${CODE_PREFIX}${String(codeNum).padStart(4, "0")}`;
+}
+
 function isUniqueViolation(error: unknown): boolean {
   return (
     typeof error === "object" &&
@@ -9,10 +16,17 @@ function isUniqueViolation(error: unknown): boolean {
   );
 }
 
-function isEmailUniqueViolation(error: unknown): boolean {
+function isConstraintViolation(error: unknown, constraint: string): boolean {
   if (!isUniqueViolation(error)) return false;
-  const constraint = (error as { constraint?: string }).constraint ?? "";
-  return constraint === "volunteer_registrations_email_unique";
+  return (error as { constraint?: string }).constraint === constraint;
+}
+
+function isEmailUniqueViolation(error: unknown): boolean {
+  return isConstraintViolation(error, "volunteer_registrations_email_unique");
+}
+
+function isCodeUniqueViolation(error: unknown): boolean {
+  return isConstraintViolation(error, "volunteer_registrations_code_unique");
 }
 
 function duplicateEmailResponse() {
@@ -67,6 +81,7 @@ export async function POST(request: Request) {
   } = result.data;
 
   const columns = [
+    "verification_code",
     "full_name",
     "email",
     "whatsapp",
@@ -80,7 +95,8 @@ export async function POST(request: Request) {
     "skill_level",
   ];
 
-  const values = [
+  const values: unknown[] = [
+    "",
     fullName,
     email,
     whatsapp,
@@ -111,17 +127,30 @@ export async function POST(request: Request) {
   }
 
   try {
-    await getPool().query(
-      `INSERT INTO volunteer_registrations (${columns.join(", ")})
-       VALUES (${placeholders})`,
-      values,
-    );
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const verificationCode = generateVerificationCode();
+      values[0] = verificationCode;
 
-    return Response.json({ ok: true }, { status: 201 });
+      try {
+        await getPool().query(
+          `INSERT INTO volunteer_registrations (${columns.join(", ")})
+           VALUES (${placeholders})`,
+          values,
+        );
+
+        return Response.json({ ok: true, verificationCode }, { status: 201 });
+      } catch (error) {
+        if (isEmailUniqueViolation(error)) return duplicateEmailResponse();
+        if (isCodeUniqueViolation(error)) continue;
+        throw error;
+      }
+    }
+
+    return Response.json(
+      { error: "We could not generate a unique code. Please try again." },
+      { status: 500 },
+    );
   } catch (error) {
-    // Two simultaneous applications with the same email can still reach the
-    // database unique index after the check above.
-    if (isEmailUniqueViolation(error)) return duplicateEmailResponse();
     console.error("Failed to save volunteer application:", error);
     return Response.json(
       { error: "We could not save your application. Please try again." },

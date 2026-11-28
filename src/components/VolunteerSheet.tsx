@@ -7,6 +7,7 @@ export type VolunteerSortKey =
   | "created_desc"
   | "created_asc"
   | "name_asc"
+  | "code_asc"
   | "team_asc"
   | "shirt_asc";
 
@@ -14,6 +15,7 @@ export const VOLUNTEER_SORT_OPTIONS: { value: VolunteerSortKey; label: string }[
   { value: "created_desc", label: "Newest first" },
   { value: "created_asc", label: "Oldest first" },
   { value: "name_asc", label: "Name A–Z" },
+  { value: "code_asc", label: "Code A–Z" },
   { value: "team_asc", label: "Team A–Z" },
   { value: "shirt_asc", label: "T-shirt size" },
 ];
@@ -22,6 +24,7 @@ export const VOLUNTEER_COLUMNS: {
   key: keyof VolunteerRegistration;
   label: string;
 }[] = [
+  { key: "verification_code", label: "Code" },
   { key: "full_name", label: "Name" },
   { key: "email", label: "Email" },
   { key: "whatsapp", label: "WhatsApp" },
@@ -55,6 +58,7 @@ export function filterVolunteerRows(
   if (!term) return rows;
   return rows.filter((row) =>
     [
+      row.verification_code,
       row.full_name,
       row.email,
       row.whatsapp,
@@ -74,6 +78,10 @@ export function sortVolunteerRows(
       return sorted.sort((a, b) => a.created_at.localeCompare(b.created_at));
     case "name_asc":
       return sorted.sort((a, b) => a.full_name.localeCompare(b.full_name));
+    case "code_asc":
+      return sorted.sort((a, b) =>
+        a.verification_code.localeCompare(b.verification_code),
+      );
     case "team_asc":
       return sorted.sort((a, b) => a.team.localeCompare(b.team));
     case "shirt_asc":
@@ -206,8 +214,12 @@ export default function VolunteerSheet({
             </button>
             <span className="oytf-admin-eyebrow">VOLUNTEER APPLICATION</span>
             <h2 id="volunteer-detail-title">{selected.full_name}</h2>
-            <p className="oytf-admin-modal-code">{selected.email}</p>
+            <p className="oytf-admin-modal-code">{selected.verification_code}</p>
             <dl className="oytf-admin-modal-grid">
+              <div>
+                <dt>Email</dt>
+                <dd>{selected.email}</dd>
+              </div>
               <div>
                 <dt>WhatsApp</dt>
                 <dd>{selected.whatsapp}</dd>

@@ -385,6 +385,8 @@ export default function VolunteerForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success">(
     "idle",
   );
+  const [verificationCode, setVerificationCode] = useState("");
+  const [copiedCode, setCopiedCode] = useState(false);
   const [serverError, setServerError] = useState("");
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -429,6 +431,16 @@ export default function VolunteerForm() {
     return index >= 0 ? index + 1 : 2;
   }
 
+  async function copyVolunteerCode() {
+    if (!verificationCode) return;
+    try {
+      await navigator.clipboard.writeText(verificationCode);
+      setCopiedCode(true);
+    } catch {
+      setCopiedCode(false);
+    }
+  }
+
   async function submitApplication() {
     const validation = validateVolunteerForm(values);
     if (!validation.ok) {
@@ -449,6 +461,7 @@ export default function VolunteerForm() {
       const data = (await response.json().catch(() => ({}))) as {
         error?: string;
         errors?: VolunteerFieldErrors;
+        verificationCode?: string;
       };
 
       if (!response.ok) {
@@ -466,6 +479,8 @@ export default function VolunteerForm() {
 
       setErrors({});
       setServerError("");
+      setVerificationCode(data.verificationCode ?? "");
+      setCopiedCode(false);
       setStatus("success");
       setStep(TOTAL_STEPS);
       scrollToTop();
@@ -726,6 +741,23 @@ export default function VolunteerForm() {
               Ogbor Youth Tech Fest 2026 just got stronger. Your volunteer
               application has been received.
             </p>
+            {verificationCode && (
+              <div className="max-w-md border-2 border-brand-ink bg-brand-mist/60 p-5">
+                <span className="font-rounded text-[10px] font-black uppercase tracking-[0.16em] text-brand-muted">
+                  Your volunteer code
+                </span>
+                <p className="mt-2 font-display text-2xl font-black tracking-tight text-brand-forest sm:text-3xl">
+                  {verificationCode}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => void copyVolunteerCode()}
+                  className="mt-4 font-rounded text-xs font-black uppercase tracking-[0.12em] text-brand-ink underline decoration-brand-sun decoration-2 underline-offset-4"
+                >
+                  {copiedCode ? "COPIED ✓" : "COPY CODE"} <span aria-hidden="true">⧉</span>
+                </button>
+              </div>
+            )}
             <p className="max-w-2xl">
               Please click the link below to join our Volunteer WhatsApp group to
               stay connected with other volunteers and the planning committee for

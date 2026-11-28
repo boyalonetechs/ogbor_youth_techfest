@@ -20,6 +20,8 @@ type AdminDashboardProps = {
   today: string;
 };
 
+type ActiveSheet = "attendee" | "volunteer";
+
 type SendCodesSummary = {
   total: number;
   sent: number;
@@ -97,9 +99,7 @@ export default function AdminDashboard({
   const [loginError, setLoginError] = useState("");
   const registrations = initialRegistrations;
   const volunteers = initialVolunteers;
-  const [activeSheet, setActiveSheet] = useState<"attendee" | "volunteer">(
-    "attendee",
-  );
+  const [activeSheet, setActiveSheet] = useState<ActiveSheet | null>(null);
   const [volunteerSortBy, setVolunteerSortBy] =
     useState<VolunteerSortKey>("created_desc");
   const [search, setSearch] = useState("");
@@ -119,6 +119,16 @@ export default function AdminDashboard({
   );
 
   const phase = !configured ? "error" : !authenticated ? "locked" : "ready";
+
+  function openSheet(sheet: ActiveSheet) {
+    setActiveSheet(sheet);
+    setSearch("");
+    setSearchOpen(false);
+    setCodeInput("");
+    setLookupResult(null);
+    setLookupError("");
+    setSelectedCode("");
+  }
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -278,6 +288,8 @@ export default function AdminDashboard({
   const sheetRegistrations = sorted;
 
   function downloadCsv() {
+    if (!activeSheet) return;
+
     if (activeSheet === "volunteer") {
       downloadVolunteerCsv(volunteers, search, volunteerSortBy);
       return;
@@ -344,31 +356,37 @@ export default function AdminDashboard({
         <header className="oytf-admin-header">
           <div>
             <span className="oytf-admin-eyebrow">OGBOR YOUTH TECH FEST 2026</span>
-            <h1>
-              {activeSheet === "attendee"
-                ? "REGISTRATION DASHBOARD"
-                : "VOLUNTEER APPLICATIONS"}
-            </h1>
+            <h1>REGISTRATION DASHBOARD</h1>
             <p>
-              {activeSheet === "attendee"
-                ? "Enter a registration code to look up the attendee instantly."
-                : "Review the people who applied to help at the event."}
+              {!activeSheet
+                ? "Choose a sheet below to view registrations."
+                : activeSheet === "attendee"
+                  ? "Enter a registration code to look up the attendee instantly."
+                  : "Review the people who applied to help at the event."}
             </p>
           </div>
           <div className="oytf-admin-header-actions">
-            <button
-              type="button"
-              className="oytf-button oytf-button--outline"
-              aria-expanded={searchOpen}
-              aria-controls="admin-search-panel"
-              onClick={() => setSearchOpen((open) => !open)}
-            >
-              {searchOpen ? "HIDE SEARCH" : "SEARCH"}{" "}
-              <span aria-hidden="true">{searchOpen ? "×" : "⌕"}</span>
-            </button>
-            <button type="button" className="oytf-button oytf-button--outline" onClick={downloadCsv}>
-              DOWNLOAD CSV <span aria-hidden="true">↓</span>
-            </button>
+            {activeSheet && (
+              <>
+                <button
+                  type="button"
+                  className="oytf-button oytf-button--outline"
+                  aria-expanded={searchOpen}
+                  aria-controls="admin-search-panel"
+                  onClick={() => setSearchOpen((open) => !open)}
+                >
+                  {searchOpen ? "HIDE SEARCH" : "SEARCH"}{" "}
+                  <span aria-hidden="true">{searchOpen ? "×" : "⌕"}</span>
+                </button>
+                <button
+                  type="button"
+                  className="oytf-button oytf-button--outline"
+                  onClick={downloadCsv}
+                >
+                  DOWNLOAD CSV <span aria-hidden="true">↓</span>
+                </button>
+              </>
+            )}
             <button
               type="button"
               className="oytf-button oytf-button--outline"
@@ -446,7 +464,7 @@ export default function AdminDashboard({
             type="button"
             className={`oytf-admin-sheet-picker__button ${activeSheet === "attendee" ? "is-active" : ""}`}
             aria-pressed={activeSheet === "attendee"}
-            onClick={() => setActiveSheet("attendee")}
+            onClick={() => openSheet("attendee")}
           >
             <span className="oytf-admin-sheet-picker__label">ATTENDEE SHEET</span>
             <strong>{stats.attendees}</strong>
@@ -458,7 +476,7 @@ export default function AdminDashboard({
             type="button"
             className={`oytf-admin-sheet-picker__button ${activeSheet === "volunteer" ? "is-active" : ""}`}
             aria-pressed={activeSheet === "volunteer"}
-            onClick={() => setActiveSheet("volunteer")}
+            onClick={() => openSheet("volunteer")}
           >
             <span className="oytf-admin-sheet-picker__label">VOLUNTEER SHEET</span>
             <strong>{stats.volunteers}</strong>
@@ -473,7 +491,7 @@ export default function AdminDashboard({
           </button>
         </div>
 
-        {searchOpen && (
+        {activeSheet && searchOpen && (
           <section id="admin-search-panel" className="oytf-admin-search-panel">
             <label htmlFor="admin-search">Filter the sheet</label>
             <input
@@ -483,7 +501,7 @@ export default function AdminDashboard({
               placeholder={
                 activeSheet === "attendee"
                   ? "Search name, email, phone or code…"
-                  : "Search name, email, WhatsApp, team or skill…"
+                  : "Search code, name, email, WhatsApp, team or skill…"
               }
               onChange={(event) => setSearch(event.target.value)}
             />
@@ -496,7 +514,7 @@ export default function AdminDashboard({
         )}
 
         {activeSheet === "attendee" && (
-          <section className="oytf-admin-verify">
+          <section className="oytf-admin-verify mt-10">
             <div>
               <h2>FIND A REGISTRATION</h2>
               <p>Type or paste a code to see the matching attendee.</p>
@@ -520,7 +538,7 @@ export default function AdminDashboard({
         )}
 
         {activeSheet === "attendee" ? (
-        <div className="oytf-admin-sheet">
+        <div className="oytf-admin-sheet oytf-admin-sheet--attendee">
           <div className="oytf-admin-sheet-bar">
             <span>REGISTRATION SHEET</span>
             <label className="oytf-admin-sort">
@@ -576,14 +594,14 @@ export default function AdminDashboard({
             )}
           </div>
         </div>
-        ) : (
+        ) : activeSheet === "volunteer" ? (
           <VolunteerSheet
             volunteers={volunteers}
             search={search}
             sortBy={volunteerSortBy}
             onSortChange={setVolunteerSortBy}
           />
-        )}
+        ) : null}
 
         {activeSheet === "attendee" && lookupResult && (
           <div

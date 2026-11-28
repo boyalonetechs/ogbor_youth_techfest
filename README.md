@@ -18,8 +18,10 @@ as arrays.
 The six-step volunteer form lives at `/register/volunteer`. It asks for contact
 details, T-shirt size, previous volunteering, preferred team, skills and skill
 level. The browser validates each step and the `/api/volunteer` route handler
-validates the full submission again before storing it in PostgreSQL. The final
-step links to the volunteer WhatsApp group.
+validates the full submission again before storing it in PostgreSQL. Every
+application receives a volunteer code (`OYTFV-2026-0001`), shown on the final
+step and in the volunteer sheet. The final step also links to the volunteer
+WhatsApp group.
 
 ## Manual attendee registration
 
@@ -33,10 +35,11 @@ it.
 
 ## Admin dashboard
 
-`/admin` is protected by `ADMIN_PASSWORD`. It shows both the attendee
-registrations and the volunteer applications in one dashboard: two boxes below
-the summary open the chosen sheet, each with its own search, sort, detail popup
-and CSV export. Attendee code lookup stays in the attendee sheet.
+`/admin` is protected by `ADMIN_PASSWORD`. It opens with the summary and two
+sheet boxes only; no registration table is shown until an Attendee or Volunteer
+box is clicked. Each sheet then has its own search, sort, detail popup and CSV
+export. Attendee code lookup stays in the attendee sheet, and both sheets show
+their verification codes.
 
 The headline total counts unique people by email across both sheets. If the same
 email appears in both attendee registrations and volunteer applications, it is
@@ -80,7 +83,14 @@ counted once; the volunteer box shows how many of those overlaps exist.
    psql "$DATABASE_URL" -f db/volunteer_registrations.sql
    ```
 
-4. Optional: import the existing `public/attendance.csv` registrations. The CSV
+4. If the volunteer table already exists without codes, add them before using
+   the current app:
+
+   ```bash
+   psql "$DATABASE_URL" -f db/volunteer_registrations_codes.sql
+   ```
+
+5. Optional: import the existing `public/attendance.csv` registrations. The CSV
    registration IDs become verification codes, and timestamps are interpreted as
    Africa/Lagos local time. The import is idempotent and creates a backup table
    before inserting rows.
@@ -91,7 +101,15 @@ counted once; the volunteer box shows how many of those overlaps exist.
    psql "$url" -v ON_ERROR_STOP=1 -f db/import_attendance.sql
    ```
 
-5. Start the app:
+6. Optional: import the exported volunteer applications from
+   `public/volunteer.csv`. The import adds missing codes, skips emails already
+   in the table, and maps free-text skills into `other_skill`.
+
+   ```bash
+   npm run import:volunteers
+   ```
+
+7. Start the app:
 
    ```bash
    npm run dev

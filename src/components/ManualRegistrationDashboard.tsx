@@ -201,7 +201,7 @@ export default function ManualRegistrationDashboard({
 
   return (
     <div className="oytf-admin-shell">
-      <div className="oytf-admin-main">
+      <div className="oytf-admin-main oytf-manual-main">
         <header className="oytf-admin-header">
           <div>
             <span className="oytf-admin-eyebrow">PRIVATE · MANUAL ENTRY</span>

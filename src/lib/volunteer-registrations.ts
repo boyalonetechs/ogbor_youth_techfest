@@ -2,6 +2,7 @@ import { getPool } from "@/lib/db";
 
 export type VolunteerRegistration = {
   id: string | number;
+  verification_code: string;
   full_name: string;
   email: string;
   whatsapp: string;
